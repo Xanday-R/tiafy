@@ -1,0 +1,120 @@
+/* Navigation panel */
+
+img {
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+}
+
+.rImg:hover {
+    cursor: pointer;
+}
+
+.form-select-sm {
+    position: relative;
+    margin-top: 6px;
+    height: 30px;
+}
+
+/* Spinner */
+
+.d-flex {
+    position: relative;
+    top: 14em;
+    margin-bottom: 10px;
+}
+
+.spinner-border {
+    position: relative;
+    width: 3em;
+    height: 3em;
+    margin-bottom: 10px;
+}
+
+/* Data */
+
+.appendor {
+    margin-bottom: 0px;
+    text-decoration: none;
+}
+
+.card {
+    width: 50%;
+    padding: 0px;
+}
+
+.card-img {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.data {
+    position: relative;
+}
+
+.justify-content-center {
+    margin: 0px;
+}
+
+p {
+    text-overflow: ellipsis; 
+}
+
+.dataT {
+    position: relative;
+    top: 1em;
+    margin-bottom: 1em;
+}
+
+h6 {
+    position: relative;
+    margin: 0px;
+    top: 5px;
+    color: gray;
+}
+
+/* Media */
+
+@media screen and (min-height: 768px) {
+    * {
+        font-size: 115%;
+    }
+
+    /* Navigation panel */
+
+    img {
+        width: 60%;
+        height: 60%;
+    }
+    .navbar-toggler {
+        height: 100px;
+        width: 100px;
+    }
+
+    /* Spinner */
+
+    .spinner-border {
+        width: 5em;
+        height: 5em;
+    }
+
+    .d-flex {
+        position: relative;
+        margin-bottom: 20px;
+    }
+
+    h3 {
+        font-size: 180%;
+    }
+
+    /* Data */
+
+    .appendor {
+        font-size: 80%;
+    }
+
+    .data {
+        top: 10em;
+    }
+}
