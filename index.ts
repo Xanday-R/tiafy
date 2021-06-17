@@ -9,14 +9,12 @@ import { Get } from './db/get';
 import { CheckAuth } from './db/checkauth';
 import { AddRemLike } from './db/likesquote';
 
+// app.set('views', __dirname + '/site/h')
+
+// app.set('view engine', 'ejs');
+
 app.use(express.static(__dirname + "/site"));
 app.use(cookieParser());
-
-
-// app.get('/', async(req:express.Request, res:express.Response) => {
-//     console.log(await get());
-//     res.send('Hi')
-// });
 
 app.get('*/checkauth', async(req:express.Request, res:express.Response) => {
     try {
