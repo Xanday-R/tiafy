@@ -48,15 +48,9 @@ app.post('*/likequote', async(req:express.Request, res:express.Response) => {
         result = await AddRemLike(result.res[0].id, result.liked, req.query.id, 'quote');
         res.json(result);
     }catch(err:any) {
-        res.json({result: false, status: 520, description: 'Unknown Error'});
+        res.status(520);
     }
 });
-
-// app.get('*/getlikes', async(req:express.Request, res:express.Response) => {
-//     let get:any = await Get();
-//     res.json({result: true, get});
-// });
-
 
 app.listen(3000, (req: express.Request, res: express.Response) => {
     console.log('Started!');

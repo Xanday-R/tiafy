@@ -1,10 +1,5 @@
 function like(id) {
-    axios.post(`http:/127.0.0.1:80/likequote?id=${id}`)
-        .then(result => {
-            console.log(result);
-            if(result.data.auth === false)
-                alert('Авторизируйся!');
-        });
+    return axios.post(`http:/127.0.0.1:80/likequote?id=${id}`)
 }
 
 class Quote extends React.Component { 
@@ -27,18 +22,24 @@ class Quote extends React.Component {
                     <p>{this.props.TextQuote}</p>
                     <footer className="blockquote-footer"><cite>{this.props.author}</cite></footer>
                     </blockquote>
-                    <h6><img src={this.src} onClick={() => {
+                    <h6><img src={this.src} onClick={async() => {
                         if(this.state.liked === true) {
-                            this.src = "img/heart.svg";
-                            this.likes = this.likes - 1;
-                            this.setState({ liked: false });
-                            like(this.props.id);
+                            let result = await like(this.props.id);
+                            if(result.data.auth === true) {
+                                this.src = "img/heart.svg";
+                                this.likes = this.likes - 1;
+                                this.setState({ liked: false });
+                            }else
+                                alert('Зарегистрируйтесь!');
                         }
                         else {
-                            this.src = "img/heart-fill.svg";
-                            this.likes = this.likes + 1;
-                            this.setState({ liked: true });
-                            like(this.props.id);
+                            let result = await like(this.props.id);
+                            if(result.data.auth === true) {
+                                this.src = "img/heart-fill.svg";
+                                this.likes = this.likes + 1;
+                                this.setState({ liked: true });
+                            }else
+                                alert('Зарегистрируйтесь!');
                         }
                     }} className="rImg" style={{ "width": "1.65em", "height": "1.65em"}} />: {this.likes}</h6>
                 </div>
@@ -86,11 +87,12 @@ axios.get('http:/127.0.0.1:80/checkauth')
                     let liked = [];
                     for(let a = 0; a < result.data.get.quote[0].length; a++) {
                         liked.push(false);
-                        for(let i = 0; i < res.data.liked.length; i++)
-                            if(res.data.liked[i].idrecords == result.data.get.quote[0][a].id && res.data.liked[i].type == 'quote') {
-                                liked[a] = true;
-                                break;
-                            }
+                        if(res.data.liked !== undefined) 
+                            for(let i = 0; i < res.data.liked.length; i++)
+                                if(res.data.liked[i].idrecords == result.data.get.quote[0][a].id && res.data.liked[i].type == 'quote') {
+                                    liked[a] = true;
+                                    break;
+                                }
                     }
                     ReactDOM.render(
                         <div className='row justify-content-center'>
