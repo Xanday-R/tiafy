@@ -18,5 +18,8 @@ export async function Get(){
             }
         }
     }
-    return {quote: [data[0], array[0]], story: [data[1], array[1]]};
+    return {
+        quote: [data[0], array[0]], 
+        story: [data[1], array[1]]
+    };
 }
