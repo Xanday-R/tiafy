@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Tiafy - Главная страница</title>
+    <link rel="shortcut icon" href="img/icon.png" type="image/x-icon">
+    <!--React-->
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <!--Bootstrap-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+    <!--jQuery-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" referrerpolicy="no-referrer"></script>
+    <!--Babel-->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!--Axios-->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <!--CSS-->
+    <link rel="stylesheet" href="css/index.css">
+  </head>
+  <body>
+    <!--Navigation panel-->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid">
+        <a class="navbar-brand" style="margin-right: 8px;">
+          <% if(result === false) { %>
+            <%- '<img src="img/htmlIcon.png"></img>' %>
+          <% } else if(result === true && auth === true) { %> 
+            <%- `<img src='${photo}'></img>` %> 
+          <% } else if(result === true && auth === false) { %> 
+            <%- '<img src="img/htmlIcon.png"></img>' %> 
+          <% } %> 
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+          <div class="navbar-nav">
+            <% if(result === false) { %>
+              <%- '<a class ="nav-link" href="#">О сайте</a>' %>
+            <% }else if(result === true && auth === true) { %> 
+              <%- '<a class ="nav-link" href="#">Профиль</a> <a class ="nav-link" href="#">О сайте</a>' %> 
+            <% } else if(result === true && auth === false) { %> 
+              <%- '<a class ="nav-link" href="#">Авторизироваться</a> <a class ="nav-link" href="#">О сайте</a>'  %> 
+            <% } %> 
+          </div>
+        </div>
+      </div>
+    </nav>
+    <!--Spinner-->
+    <div class="data">
+      <div class="d-flex justify-content-center">
+        <% if(result === false) { %>
+          <%- `<h3 class='alert-danger'>Сервер не отвечает. Попробуйте позже</h3>` %>
+        <% } %> 
+      </div>
+      <div class="d-flex justify-content-center"></div>
+    </div>
+  </body>
+  <script src="js/index.js" type="text/babel"></script>
+  <script type="text/babel">
+    if('<%= result %>' == 'true') 
+      $('.data').addClass('dataT');
+    axios.get('http:/127.0.0.1:80/get')
+      .then(result => {
+          let liked = [];
+          for(let a = 0; a < result.data.get.quote[0].length; a++) {
+              liked.push(false); 
+              for(let i = 0; i < result.data.liked.length; i++)
+                  if(result.data.liked[i].idrecords == result.data.get.quote[0][a].id && result.data.liked[i].type == 'quote') {
+                      liked[a] = true;
+                      break;
+                  }
+          }
+          ReactDOM.render(
+              <div className='row justify-content-center'>
+                  <div className="card">
+                      <Quote TextQuote={result.data.get.quote[0][0].text} liked={liked[0]} id={result.data.get.quote[0][0].id} likes={result.data.get.quote[0][0].likes} appendor={result.data.get.quote[1][0]} author={result.data.get.quote[0][0].author} time={result.data.get.quote[0][0].time}/>
+                      <Quote TextQuote={result.data.get.quote[0][1].text} liked={liked[1]} id={result.data.get.quote[0][1].id} likes={result.data.get.quote[0][1].likes} appendor={result.data.get.quote[1][1]} author={result.data.get.quote[0][1].author} time={result.data.get.quote[0][1].time}/>
+                      <Quote TextQuote={result.data.get.quote[0][2].text} liked={liked[2]} id={result.data.get.quote[0][2].id} likes={result.data.get.quote[0][2].likes} appendor={result.data.get.quote[1][2]} author={result.data.get.quote[0][2].author} time={result.data.get.quote[0][2].time}/>
+                  </div>
+                  <Story title={result.data.get.story[0][0].name} prehistory={result.data.get.story[0][0].text} src="#" id={result.data.get.story[0][0].id} img={result.data.get.story[0][0].img}></Story>
+              </div>, 
+          $('.data')[0]);
+      });
+  </script>
+</html>
