@@ -66,7 +66,3 @@ function Story(props) {
         </div>
     );
 }
-
-// React
-
-// Quote, Story
