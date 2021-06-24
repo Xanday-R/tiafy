@@ -77,9 +77,9 @@ app.get('/story', async(req:express.Request, res:express.Response) => {
             }
             else {
                 if(result[0] == 0)
-                    res.render('404', {result: false, auth: false, status: 404, description: 'Not found'});
+                    res.render('story', {result: true, auth: false, name: result[1].name, text: result[1].text, appendor: result[1].appendor, img: result[1].img, likes: result[1].likes, time: result[1].time});
                 else
-                    res.render('index', {result: true, auth: true, photo: result[0].res[0].photo, text: result[1].text, appendor: result[1].appendor, img: result[1].img, likes: result[1].likes, time: result[1].time});
+                    res.render('story', {result: true, auth: true, photo: result[0].res[0].photo, name: result[1].name, text: result[1].text, appendor: result[1].appendor, img: result[1].img, likes: result[1].likes, time: result[1].time});
             }
         }
     }catch(err:any) {
