@@ -58,55 +58,32 @@ app.get('/', async(req:express.Request, res:express.Response) => {
 });
 
 app.get('/story', async(req:express.Request, res:express.Response) => {
-    // try {
-    //     let result:any = [0, 0];
-    //     result[0] = await CheckAuth(req.cookies.token);
-    //     if(req.query.id === undefined) {
-    //         if(result[0] == 0)
-    //             res.render('404', {result: false, auth: false, status: 404, description: 'Not found'});
-    //         else
-    //             res.render('404', {result: false, auth: true, photo: result.res[0].photo, status: 404, description: 'Not found'});
-    //     }
-    //     else {
-    //         result[1] = await GetStory(req.query.id);
-    //         if(result[1] == 0) {
-    //             if(result[0] == 0)
-    //                 res.render('404', {result: false, auth: false, status: 404, description: 'Not found'});
-    //             else
-    //                 res.render('404', {result: false, auth: true, photo: result.res[0].photo, status: 404, description: 'Not found'});
-    //         }
-    //         else {
-    //             if(result[0] == 0)
-    //                 res.render('404', {result: false, auth: false, status: 404, description: 'Not found'});
-    //             else
-    //                 res.render('index', {result: true, auth: true, photo: result.res[0].photo, text: result[1].text, appendor: result[1].appendor, img: result[1].img, likes: result[1].likes, time: result[1].time});
-    //         }
-    //     }
-    // }catch(err:any) {
-    //     res.render('404', {result: false, auth: false, status: 520, description: 'Unknown Error'});
-    // }
-    let result:any = [0, 0];
-    result[0] = await CheckAuth(req.cookies.token);
-    if(req.query.id === undefined) {
-        if(result[0] == 0)
-            res.render('404', {result: false, auth: false, status: 404, description: 'Not found'});
-        else
-            res.render('404', {result: false, auth: true, photo: result[0].res[0].photo, status: 404, description: 'Not found'});
-    }
-    else {
-        result[1] = await GetStory(req.query.id);
-        if(result[1] == 0) {
+    try {
+        let result:any = [0, 0];
+        result[0] = await CheckAuth(req.cookies.token);
+        if(req.query.id === undefined) {
             if(result[0] == 0)
                 res.render('404', {result: false, auth: false, status: 404, description: 'Not found'});
             else
                 res.render('404', {result: false, auth: true, photo: result[0].res[0].photo, status: 404, description: 'Not found'});
         }
         else {
-            if(result[0] == 0)
-                res.render('404', {result: false, auth: false, status: 404, description: 'Not found'});
-            else
-                res.render('index', {result: true, auth: true, photo: result[0].res[0].photo, text: result[1].text, appendor: result[1].appendor, img: result[1].img, likes: result[1].likes, time: result[1].time});
+            result[1] = await GetStory(req.query.id);
+            if(result[1] == 0) {
+                if(result[0] == 0)
+                    res.render('404', {result: false, auth: false, status: 404, description: 'Not found'});
+                else
+                    res.render('404', {result: false, auth: true, photo: result[0].res[0].photo, status: 404, description: 'Not found'});
+            }
+            else {
+                if(result[0] == 0)
+                    res.render('404', {result: false, auth: false, status: 404, description: 'Not found'});
+                else
+                    res.render('index', {result: true, auth: true, photo: result[0].res[0].photo, text: result[1].text, appendor: result[1].appendor, img: result[1].img, likes: result[1].likes, time: result[1].time});
+            }
         }
+    }catch(err:any) {
+        res.render('404', {result: false, auth: false, status: 520, description: 'Unknown Error'});
     }
 });
 
