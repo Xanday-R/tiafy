@@ -21,20 +21,37 @@
     <link rel="stylesheet" href="../index.css">
 </head>
 <body>
+  <!--Navigation panel-->
+    <!--Navigation panel-->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid">
-          <a class="navbar-brand" style="margin-right: 8px;"></a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div class="navbar-nav"></div>
+      <div class="container-fluid">
+        <a class="navbar-brand" style="margin-right: 8px;">
+          <% if(result === false && auth === false && status == 520) { %>
+            <%- '<img src="img/htmlIcon.png"></img>' %>
+          <% } else if(auth === true) { %> 
+            <%- `<img src='${photo}'></img>` %> 
+          <% } else if(auth === false) { %> 
+            <%- '<img src="img/htmlIcon.png"></img>' %> 
+          <% } %> 
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+          <div class="navbar-nav">
+            <% if(result === false && auth === false && status == 520) { %>
+              <%- '<a class ="nav-link" href="#">О сайте</a>' %>
+            <% }else if(auth === true) { %> 
+              <%- '<a class ="nav-link" href="#">Профиль</a> <a class ="nav-link" href="#">О сайте</a>' %> 
+            <% } else if(auth === false) { %> 
+              <%- '<a class ="nav-link" href="#">Авторизироваться</a> <a class ="nav-link" href="#">О сайте</a>'  %> 
+            <% } %> 
           </div>
         </div>
+      </div>
     </nav>
-        <div class="d-flex justify-content-center" style="top: 9em;">
-          <img src="img/404.png" style="width: 640px; height: 256px;">
-        </div>
-    <script src="../story.jsx" type="text/babel"></script>
+  <div class="d-flex justify-content-center" style="top: 9em;">
+    <img src="img/404.png" style="width: 640px; height: 256px;">
+  </div>
 </body>
 </html>

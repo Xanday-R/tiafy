@@ -7,7 +7,6 @@ export async function GetStory(id:any) {
     if(result == 0) return 0;
     result[0].appendor = await knex('accounts').select('login').where({id: result[0].appendor});
     return {
-        result: true, 
         name: result[0].name, 
         text: result[0].text, 
         appendor: result[0].appendor, 
