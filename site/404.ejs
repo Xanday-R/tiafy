@@ -42,16 +42,20 @@
             <% if(result === false && auth === false && status == 520) { %>
               <%- '<a class ="nav-link" href="#">О сайте</a>' %>
             <% }else if(auth === true) { %> 
-              <%- '<a class ="nav-link" href="#">Профиль</a> <a class ="nav-link" href="#">О сайте</a>' %> 
+              <%- '<a class ="nav-link" href="/profile">Профиль</a> <a class ="nav-link" href="/about">О сайте</a>' %> 
             <% } else if(auth === false) { %> 
-              <%- '<a class ="nav-link" href="#">Авторизироваться</a> <a class ="nav-link" href="#">О сайте</a>'  %> 
+              <%- '<a class ="nav-link" href="/auth">Авторизироваться</a> <a class ="nav-link" href="/about">О сайте</a>'  %> 
             <% } %> 
           </div>
         </div>
       </div>
     </nav>
-  <div class="d-flex justify-content-center" style="top: 9em;">
-    <img src="img/404.png" style="width: 640px; height: 256px;">
+  <div class="d-flex justify-content-center" <% if(status == 404) { %> <%- 'style="top: 9em;"' %> <% } %>>
+    <% if(status == 404) { %> 
+      <%- '<img src="img/404.png" style="width: 640px; height: 256px;">' %>
+    <% }else if(status == 520) { %>
+      <%- `<h3 class='alert-danger'>Неизвестная ошибка. Попробуйте позже</h3>` %>
+    <% } %>  
   </div>
 </body>
 </html>
