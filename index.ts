@@ -111,7 +111,6 @@ app.get('/story', async(req:express.Request, res:express.Response) => {
                     }
                     if(liked !== true)
                         liked = false;
-                    console.log(liked);
                     res.render('story', {
                         result: true, 
                         auth: true, 
