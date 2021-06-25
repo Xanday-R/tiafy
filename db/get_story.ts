@@ -12,6 +12,7 @@ export async function GetStory(id:any) {
         appendor: result[0].appendor, 
         img: result[0].img, 
         likes: result[0].likes, 
-        time: result[0].time
+        time: result[0].time,
+        id: result[0].id
     };
 }

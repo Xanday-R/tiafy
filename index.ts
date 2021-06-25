@@ -42,6 +42,18 @@ app.post('*/likequote', async(req:express.Request, res:express.Response) => {
     }
 });
 
+app.post('*/likestory', async(req:express.Request, res:express.Response) => {
+    try {
+        let result:any = await CheckAuth(req.cookies.token);
+        if(result == 0) 
+            res.json({result: true, auth: false});
+        result = await AddRemLike(result.res[0].id, result.liked, req.query.id, 'story');
+        res.json(result);
+    }catch(err:any) {
+        res.status(520);
+    }
+});
+
 // EJS
 
 app.get('/', async(req:express.Request, res:express.Response) => {
@@ -77,9 +89,43 @@ app.get('/story', async(req:express.Request, res:express.Response) => {
             }
             else {
                 if(result[0] == 0)
-                    res.render('story', {result: true, auth: false, name: result[1].name, text: result[1].text, appendor: result[1].appendor, img: result[1].img, likes: result[1].likes, time: result[1].time});
-                else
-                    res.render('story', {result: true, auth: true, photo: result[0].res[0].photo, name: result[1].name, text: result[1].text, appendor: result[1].appendor, img: result[1].img, likes: result[1].likes, time: result[1].time});
+                    res.render('story', {
+                        result: true, 
+                        auth: false, 
+                        id: result[1].id, 
+                        name: result[1].name, 
+                        text: result[1].text, 
+                        appendor: result[1].appendor, 
+                        img: result[1].img, 
+                        likes: result[1].likes,
+                        liked: false,
+                        time: result[1].time
+                    });
+                else {
+                    let liked:any = await CheckAuth(req.cookies.token);
+                    for(let i in liked.liked) {
+                        if(liked.liked[i].type == 'story' && liked.liked[i].idrecords == result[1].id) {
+                            liked = true;
+                            break
+                        }
+                    }
+                    if(liked !== true)
+                        liked = false;
+                    console.log(liked);
+                    res.render('story', {
+                        result: true, 
+                        auth: true, 
+                        photo: result[0].res[0].photo, 
+                        id: result[1].id, 
+                        name: result[1].name, 
+                        text: result[1].text, 
+                        appendor: result[1].appendor, 
+                        img: result[1].img, 
+                        likes: result[1].likes, 
+                        liked: liked,
+                        time: result[1].time
+                    });
+                }
             }
         }
     }catch(err:any) {

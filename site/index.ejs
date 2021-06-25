@@ -77,7 +77,7 @@
                       <Quote TextQuote={result.data.get.quote[0][1].text} liked={liked[1]} id={result.data.get.quote[0][1].id} likes={result.data.get.quote[0][1].likes} appendor={result.data.get.quote[1][1]} author={result.data.get.quote[0][1].author} time={result.data.get.quote[0][1].time}/>
                       <Quote TextQuote={result.data.get.quote[0][2].text} liked={liked[2]} id={result.data.get.quote[0][2].id} likes={result.data.get.quote[0][2].likes} appendor={result.data.get.quote[1][2]} author={result.data.get.quote[0][2].author} time={result.data.get.quote[0][2].time}/>
                   </div>
-                  <Story title={result.data.get.story[0][0].name} prehistory={result.data.get.story[0][0].text} src="#" id={result.data.get.story[0][0].id} img={result.data.get.story[0][0].img}></Story>
+                  <Story title={result.data.get.story[0][0].name} prehistory={result.data.get.story[0][0].text} src={`story?id=${result.data.get.story[0][0].id}`} id={result.data.get.story[0][0].id} img={result.data.get.story[0][0].img}></Story>
               </div>, 
           $('.data')[0]);
       });
