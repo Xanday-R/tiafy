@@ -20,6 +20,7 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <!--CSS-->
     <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/nav.css">
 </head>
 <body>
     <!--Navigation panel-->
@@ -56,7 +57,7 @@
     <script type="text/babel">
         ReactDOM.render(
             <div className='row justify-content-center'>
-                  <Story title='<%= name %>' text='<%= text %>' id='<%= id %>' img='<%= img %>' appendor='<%= appendor[0].login %>' time='<%= time %>' likes='<%= likes %>' liked='<%= liked %>'></Story>
+                  <Story title='<%= name %>' text='<%= text %>' id='<%= id %>' img='<%= img %>' appendor='<%= appendor[0].login %>' time='<%= time %>' likes={Number('<%= likes %>')} liked='<%= liked %>'></Story>
             </div>,
             $('.data')[0]
         );

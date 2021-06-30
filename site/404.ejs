@@ -19,7 +19,8 @@
     <!--Axios-->
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <!--CSS-->
-    <link rel="stylesheet" href="../index.css">
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/nav.css">
 </head>
 <body>
   <!--Navigation panel-->
@@ -40,7 +41,7 @@
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div class="navbar-nav">
             <% if(result === false && auth === false && status == 520) { %>
-              <%- '<a class ="nav-link" href="#">О сайте</a>' %>
+              <%- '<a class ="nav-link" href="/about">О сайте</a>' %>
             <% }else if(auth === true) { %> 
               <%- '<a class ="nav-link" href="/profile">Профиль</a> <a class ="nav-link" href="/about">О сайте</a>' %> 
             <% } else if(auth === false) { %> 

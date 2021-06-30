@@ -1,0 +1,89 @@
+/* Основная часть */
+
+p {
+    margin: 0px;
+}
+
+/* IMG */
+
+.picon {
+    border-radius: 50%;
+    width: 96px;
+    height: 96px;
+}
+
+.selected {
+    position: relative;
+    fill: rgb(145, 145, 145);
+    background-color: rgb(33, 37, 41);
+    box-shadow: 0 0 0 0.5em rgb(33, 37, 41);
+    border-radius: 0%;
+    width: 50%;
+    height: 50%;
+    margin-top: 1em;
+    left: 20%;
+}
+
+.lentaI {
+    position: relative;
+    border-radius: 0%;
+    width: 50%;
+    height: 50%;
+    margin-top: 1em;
+    fill: rgb(255, 255, 255);
+    left: 20%;
+}
+
+.lentaIH:hover {
+    position: relative;
+    border-radius: 0%;
+    width: 50%;
+    height: 50%;
+    margin-top: 1em;
+    fill: rgb(255, 255, 255);
+    left: 20%;
+    background-color: rgb(58, 58, 58);
+    box-shadow: 0 0 0 0.5em rgb(58, 58, 58);
+}
+
+.lentaIH:active{
+    position: relative;
+    border-radius: 0%;
+    width: 50%;
+    height: 50%;
+    margin-top: 1em;
+    fill: rgb(145, 145, 145);
+    left: 20%;
+    background-color: rgb(33, 37, 41);
+    box-shadow: 0 0 0 0.5em rgb(33, 37, 41);
+}
+
+/* DIV */
+
+.profile {
+    position: relative;
+    width: 90%;
+    height: 525px;
+    top: 1.5em;
+    display: flex;
+}
+
+.lenta {
+    position: relative;
+    width: 5%;
+    margin-right: 5%;
+    top: 50px;
+}
+
+h3 {
+    position: relative;
+    top: 7%;
+    left: 1%;
+    font-family: 'Josefin Sans', sans-serif;
+}
+
+.lentaDiv {
+    position: relative;
+    top: 25%;
+}
+

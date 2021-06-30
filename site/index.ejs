@@ -18,6 +18,7 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <!--CSS-->
     <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/nav.css">
   </head>
   <body>
     <!--Navigation panel-->
@@ -38,7 +39,7 @@
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div class="navbar-nav">
             <% if(result === false) { %>
-              <%- '<a class ="nav-link" href="#">О сайте</a>' %>
+              <%- '<a class ="nav-link" href="/about">О сайте</a>' %>
             <% }else if(result === true && auth === true) { %> 
               <%- '<a class ="nav-link" href="/profile">Профиль</a> <a class ="nav-link" href="/about">О сайте</a>' %> 
             <% } else if(result === true && auth === false) { %> 
@@ -59,7 +60,7 @@
   </body>
   <script src="js/index.js" type="text/babel"></script>
   <script type="text/babel">
-    axios.get('http:/127.0.0.1:80/get')
+    axios.post('http:/127.0.0.1:80/get')
       .then(result => {
           let liked = [];
           for(let a = 0; a < result.data.get.quote[0].length; a++) {

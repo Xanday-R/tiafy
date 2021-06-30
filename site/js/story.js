@@ -40,7 +40,7 @@ class Story extends React.Component {
                             let result = await like(this.props.id);
                             if(result.data.auth === true) {
                                 this.src = "img/heart.svg";
-                                this.likes = parseInt(this.likes) - 1;
+                                this.likes = this.likes - 1;
                                 this.setState({ liked: false });
                             }else
                                 alert('Зарегистрируйтесь!');
@@ -49,7 +49,7 @@ class Story extends React.Component {
                             let result = await like(this.props.id);
                             if(result.data.auth === true) {
                                 this.src = "img/heart-fill.svg";
-                                this.likes = parseInt(this.likes) + 1;
+                                this.likes = this.likes + 1;
                                 this.setState({ liked: true });
                             }else
                                 alert('Зарегистрируйтесь!');

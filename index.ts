@@ -3,10 +3,21 @@ import cookieParser from 'cookie-parser';
 
 const app:any = express();
 
+export let App:any = app;
+
+// DB
+
 import { Get } from './db/get';
 import { CheckAuth } from './db/checkauth';
 import { AddRemLike } from './db/likes';
 import { GetStory } from './db/get_story';
+
+// Express
+
+import { listen } from './expess/port';
+
+
+// App.use
 
 app.set('views', __dirname + '/site')
 app.set('view engine', 'ejs');
@@ -20,7 +31,7 @@ let liked = 0;
 
 // Axios
 
-app.get('*/get', async(req:express.Request, res:express.Response) => {
+app.post('*/get', async(req:express.Request, res:express.Response) => {
     try {
         let get:any = await Get();
         res.json({result: true, get: {quote: [[get.quote[0][0], get.quote[0][1], get.quote[0][2]], [get.quote[1][0], get.quote[1][1], get.quote[1][2]]], story: [[get.story[0][0]], [get.story[1][0]]]}, liked});
@@ -32,7 +43,7 @@ app.get('*/get', async(req:express.Request, res:express.Response) => {
 
 app.post('*/likequote', async(req:express.Request, res:express.Response) => {
     try {
-        let result:any = await CheckAuth(req.cookies.token);
+        let result:any = await CheckAuth(req.cookies.token, 2);
         if(result == 0) 
             res.json({result: true, auth: false});
         result = await AddRemLike(result.res[0].id, result.liked, req.query.id, 'quote');
@@ -44,7 +55,7 @@ app.post('*/likequote', async(req:express.Request, res:express.Response) => {
 
 app.post('*/likestory', async(req:express.Request, res:express.Response) => {
     try {
-        let result:any = await CheckAuth(req.cookies.token);
+        let result:any = await CheckAuth(req.cookies.token, 1);
         if(result == 0) 
             res.json({result: true, auth: false});
         result = await AddRemLike(result.res[0].id, result.liked, req.query.id, 'story');
@@ -58,7 +69,7 @@ app.post('*/likestory', async(req:express.Request, res:express.Response) => {
 
 app.get('/', async(req:express.Request, res:express.Response) => {
     try {
-        let result:any = await CheckAuth(req.cookies.token);
+        let result:any = await CheckAuth(req.cookies.token, 2);
         liked = result.liked;
         if(result == 0)
             res.render('index', {result: true, auth: false});
@@ -72,7 +83,7 @@ app.get('/', async(req:express.Request, res:express.Response) => {
 app.get('/story', async(req:express.Request, res:express.Response) => {
     try {
         let result:any = [0, 0];
-        result[0] = await CheckAuth(req.cookies.token);
+        result[0] = await CheckAuth(req.cookies.token, 1);
         if(req.query.id === undefined) {
             if(result[0] == 0)
                 res.render('404', {result: false, auth: false, status: 404, description: 'Not found'});
@@ -102,7 +113,7 @@ app.get('/story', async(req:express.Request, res:express.Response) => {
                         time: result[1].time
                     });
                 else {
-                    let liked:any = await CheckAuth(req.cookies.token);
+                    let liked:any = await CheckAuth(req.cookies.token, 2);
                     for(let i in liked.liked) {
                         if(liked.liked[i].type == 'story' && liked.liked[i].idrecords == result[1].id) {
                             liked = true;
@@ -132,8 +143,25 @@ app.get('/story', async(req:express.Request, res:express.Response) => {
     }
 });
 
+app.get('/profile', async(req:express.Request, res:express.Response) => {
+    try {
+        if(req.cookies.token === undefined) 
+            res.redirect('/auth');
+        else {
+            let result:any = await CheckAuth(req.cookies.token, 1);
+            if(result == 0) 
+                res.redirect('/auth');
+            else res.render('profile', {
+                login: result.res[0].login, 
+                email: result.res[0].email, 
+                photo: result.res[0].photo 
+            });
+        }
+    }catch(err:any) {
+        res.redirect('/');
+    }
+});
+
 // PORT
 
-app.listen(3000, (req: express.Request, res: express.Response) => {
-    console.log('Started!');
-});
+listen();
