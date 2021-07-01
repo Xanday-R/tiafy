@@ -162,6 +162,25 @@ app.get('/profile', async(req:express.Request, res:express.Response) => {
     }
 });
 
+app.get('/profile_settings', async(req:express.Request, res:express.Response) => {
+    try {
+        if(req.cookies.token === undefined) 
+            res.redirect('/auth');
+        else {
+            let result:any = await CheckAuth(req.cookies.token, 1);
+            if(result == 0) 
+                res.redirect('/auth');
+            else res.render('profile_settings', {
+                login: result.res[0].login, 
+                email: result.res[0].email, 
+                photo: result.res[0].photo 
+            });
+        }
+    }catch(err:any) {
+        res.redirect('/');
+    }
+});
+
 // PORT
 
 listen();

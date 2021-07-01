@@ -1,2 +1,3 @@
 node_modules/
 db/connection.ts
+db/outlook.ts

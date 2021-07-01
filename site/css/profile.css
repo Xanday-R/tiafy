@@ -10,6 +10,7 @@ p {
     border-radius: 50%;
     width: 96px;
     height: 96px;
+    margin-bottom: 7px;
 }
 
 .selected {
@@ -75,15 +76,32 @@ p {
     top: 50px;
 }
 
-h3 {
-    position: relative;
-    top: 7%;
-    left: 1%;
-    font-family: 'Josefin Sans', sans-serif;
-}
-
 .lentaDiv {
     position: relative;
     top: 25%;
 }
 
+.main {
+    position: relative;
+    width: 70%;
+}
+
+.icon {
+    position: relative;
+    height: 0px;
+    text-align: center;
+}
+
+/* H */
+
+h3 {
+    position: relative;
+    bottom: 0px;
+    margin-bottom: 0px;
+    font-family: 'Josefin Sans', sans-serif;
+}
+
+h6 {
+    position: relative;
+    margin-bottom: 0px;
+}
