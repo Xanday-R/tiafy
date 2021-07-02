@@ -162,7 +162,7 @@ app.get('/profile', async(req:express.Request, res:express.Response) => {
     }
 });
 
-app.get('/profile_settings', async(req:express.Request, res:express.Response) => {
+app.get('/profile-settings', async(req:express.Request, res:express.Response) => {
     try {
         if(req.cookies.token === undefined) 
             res.redirect('/auth');

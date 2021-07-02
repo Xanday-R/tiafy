@@ -81,17 +81,6 @@ p {
     top: 25%;
 }
 
-.main {
-    position: relative;
-    width: 70%;
-}
-
-.icon {
-    position: relative;
-    height: 0px;
-    text-align: center;
-}
-
 /* H */
 
 h3 {
@@ -104,4 +93,36 @@ h3 {
 h6 {
     position: relative;
     margin-bottom: 0px;
+}
+
+/* MAIN */
+
+.main {
+    position: relative;
+    width: 70%;
+}
+
+.icon {
+    position: relative;
+    height: 0px;
+    text-align: center;
+}
+
+.pass {
+    position: relative;
+    left: -2.5%;
+}
+
+.email {
+    position: relative;
+    left: 2.5%;
+}
+
+.mb-3 {
+    position: relative;
+    text-align: center;
+}
+
+.btn, .form-label {
+    margin-top: 8px;
 }
