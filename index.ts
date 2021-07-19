@@ -55,9 +55,10 @@ app.post('*/likequote', async(req:express.Request, res:express.Response) => {
 
 app.post('*/likestory', async(req:express.Request, res:express.Response) => {
     try {
-        let result:any = await CheckAuth(req.cookies.token, 1);
+        let result:any = await CheckAuth(req.cookies.token, 2);
         if(result == 0) 
             res.json({result: true, auth: false});
+        console.log(result.liked)
         result = await AddRemLike(result.res[0].id, result.liked, req.query.id, 'story');
         res.json(result);
     }catch(err:any) {
