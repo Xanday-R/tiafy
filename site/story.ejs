@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="img/icon.png" type="image/x-icon">
-    <title>Tiafy - <%= name %></title>
+    <title>Tiafy - <%= name %> </title>
     <!--React-->
     <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
@@ -27,22 +27,14 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
         <a class="navbar-brand" style="margin-right: 8px;">
-        <% if(auth === true) { %> 
-            <%- `<img src='${photo}'></img>` %> 
-        <% } else if(auth === false) { %> 
-            <%- '<img src="img/htmlIcon.png"></img>' %> 
-        <% } %> 
+            <%- '<img src="img/htmlIcon.png"></img>' %>  
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
-            <% if(auth === true) { %> 
-            <%- '<a class ="nav-link" href="/profile">Профиль</a> <a class ="nav-link" href="/about">О сайте</a>' %> 
-            <% } else if(auth === false) { %> 
             <%- '<a class ="nav-link" href="/auth">Авторизироваться</a> <a class ="nav-link" href="/about">О сайте</a>'  %> 
-            <% } %> 
         </div>
         </div>
     </div>
@@ -50,8 +42,6 @@
 
     <script src="js/story.js" type="text/babel"></script>
     <div class="data dataT">
-        <div class="d-flex justify-content-center">
-        </div>
     </div>
 
     <script type="text/babel">

@@ -1,17 +1,3 @@
-// function Story(props) {
-//     return (
-//         <div className="card" style={{ "width": "80rem" }}>
-//             <img src={props.img} className="card-img"></img>
-//             <div className="card-body">
-//                 <h5 className="card-title">{props.title}</h5>
-//                 <p className="card-text">{props.text}</p>
-//                 <img  style={{ "width": "1.65em", "height": "1.65em"}} src="img/heart-fill.svg"></img>
-//             </div>
-//             <div className="card-footer">Было добавлено пользователем <cite>{props.appendor} {props.time}</cite></div>
-//         </div>
-//     );
-// }
-
 function like(id) {
     return axios.post(`http:/127.0.0.1:80/likestory?id=${id}`)
 }

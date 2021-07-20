@@ -5,12 +5,21 @@ const app:any = express();
 
 export let App:any = app;
 
+// Multer
+
+import multer from 'multer';
+import fs from 'fs';
+
+var upload:any = multer({dest: __dirname + '/photo'});
+
+
 // DB
 
 import { Get } from './db/get';
 import { CheckAuth } from './db/checkauth';
 import { AddRemLike } from './db/likes';
 import { GetStory } from './db/get_story';
+import { UploadPhoto } from './jimp/main';
 
 // Express
 
@@ -58,12 +67,18 @@ app.post('*/likestory', async(req:express.Request, res:express.Response) => {
         let result:any = await CheckAuth(req.cookies.token, 2);
         if(result == 0) 
             res.json({result: true, auth: false});
-        console.log(result.liked)
         result = await AddRemLike(result.res[0].id, result.liked, req.query.id, 'story');
         res.json(result);
     }catch(err:any) {
         res.status(520);
     }
+});
+
+app.post('*/upload-img', upload.single('File'), async(req:express.Request, res:express.Response) => {
+    let a:any = req.file;
+    let data:any = await CheckAuth(req.cookies.token, 1);
+    UploadPhoto(a.path, data.res[0].id);
+    res.redirect('/profile-settings');
 });
 
 // EJS
