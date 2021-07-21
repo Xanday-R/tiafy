@@ -24,6 +24,8 @@
     <!--CSS-->
     <link rel="stylesheet" href="css/profile.css" >
     <link rel="stylesheet" href="css/nav.css">
+    <!--JS-->
+    <script src="js/profile_settings.js"></script>
 </head>
 <body>
     <!--Navigation panel-->
@@ -71,8 +73,8 @@
                     <%- `<img class="picon" src='${photo}'></img>` %> 
                     <h3><%= login %> </h3>
                     <form action="/upload-img" method="POST" enctype="multipart/form-data">
-                        <h6><input type="file" name="File"></h6>
-                        <button class="btn btn-dark" style="margin-top: 5px; " type="submit">Изменить</button>
+                        <h6><input type="file" name="File" accept=".jpg, .jpeg, .png"></h6>
+                        <button class="btn btn-dark" style="margin-top: 7px;" type="submit">Изменить</button>
                     </form>
                 </div>
                 <div class="main d-flex justify-content-center">
@@ -83,17 +85,17 @@
                             <input type="text" class="form-control" id="newPass">
                             <label for="oldPass" class="form-label">Введите старый пароль</label>
                             <input type="text" class="form-control" id="oldPass">
-                            <button type="button" class="btn btn-dark butEmail">Изменить</button>
+                            <button type="button" class="btn btn-dark butPass">Изменить</button>
                         </div>
                     </div>
-                    <div class="email">
+                    <div class="login">
                         <div class="mb-3">
-                            <h2>Смена почты</h2>
-                            <label for="newEmail" class="form-label">Введите новую почту</label>
-                            <input type="text" class="form-control" id="newEmail">
-                            <label for="oldEmail" class="form-label">Введите старую почту</label>
-                            <input type="text" class="form-control" id="oldEmail">
-                            <button type="button" class="btn btn-dark butEmail">Изменить</button>
+                            <h2>Смена логина</h2>
+                            <label for="newName" class="form-label">Введите новый логин</label>
+                            <input type="text" class="form-control" id="newName">
+                            <label for="oldName" class="form-label">Введите старый логин</label>
+                            <input type="text" class="form-control" id="oldName">
+                            <button type="button" class="btn btn-dark butName">Изменить</button>
                         </div>
                     </div>
                 </div>

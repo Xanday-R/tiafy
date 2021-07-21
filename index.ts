@@ -5,21 +5,13 @@ const app:any = express();
 
 export let App:any = app;
 
-// Multer
-
-import multer from 'multer';
-import fs from 'fs';
-
-var upload:any = multer({dest: __dirname + '/photo'});
-
-
 // DB
 
 import { Get } from './db/get';
 import { CheckAuth } from './db/checkauth';
 import { AddRemLike } from './db/likes';
 import { GetStory } from './db/get_story';
-import { UploadPhoto } from './jimp/main';
+import { UpdPass } from './db/upd_pass';
 
 // Express
 
@@ -72,13 +64,6 @@ app.post('*/likestory', async(req:express.Request, res:express.Response) => {
     }catch(err:any) {
         res.status(520);
     }
-});
-
-app.post('*/upload-img', upload.single('File'), async(req:express.Request, res:express.Response) => {
-    let a:any = req.file;
-    let data:any = await CheckAuth(req.cookies.token, 1);
-    UploadPhoto(a.path, data.res[0].id);
-    res.redirect('/profile-settings');
 });
 
 // EJS
@@ -196,6 +181,60 @@ app.get('/profile-settings', async(req:express.Request, res:express.Response) =>
         res.redirect('/');
     }
 });
+
+// Multer
+
+import multer from 'multer';
+import fs from 'fs';
+
+import { UploadPhoto } from './jimp/main';
+import { isForInStatement } from 'typescript';
+
+var upload:any = multer({dest: __dirname + '/photo'});
+
+// Body-parser
+
+const bodyParser = require('body-parser');
+const urlencodedParser:any = bodyParser.urlencoded({extended: false});
+
+
+app.post('/upload-img', upload.single('File'), async(req:express.Request, res:express.Response) => {
+    try {
+        let a:any = req.file;
+        if(a.mimetype == 'application/x-msdownload')
+            res.status(406);
+        else {
+            let data:any = await CheckAuth(req.cookies.token, 1);
+            if(data == 0)
+                res.redirect('/auth');
+            else {
+                UploadPhoto(a.path, data.res[0].id);
+                setTimeout(() => {
+                    res.redirect('/profile-settings');
+                }, 2500)
+            }
+        }
+    }catch(err:any) {
+        res.status(520);
+    }
+});
+
+app.post('*/update-password', urlencodedParser, async(req:express.Request, res:express.Response) => {
+    try {
+        let result:any = await CheckAuth(req.cookies.token, 1);
+        if(result == 0)
+            res.json({result: false, status: 401});
+        else {
+            result = await UpdPass(req.query.newPass, req.query.oldPass, result.res[0].id);
+            if(result == 1)
+                res.json({result: true});
+            else
+                res.json({result: false});
+        }
+    }catch(err:any) {
+        res.status(520);
+    }
+})
 
 // PORT
 
