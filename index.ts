@@ -221,15 +221,19 @@ app.post('/upload-img', upload.single('File'), async(req:express.Request, res:ex
 
 app.post('*/update-password', urlencodedParser, async(req:express.Request, res:express.Response) => {
     try {
-        let result:any = await CheckAuth(req.cookies.token, 1);
-        if(result == 0)
-            res.json({result: false, status: 401});
+        if(/[\u0400-\u04FF]/.test(`${req.query.newPass}`) === true)
+            res.json({result: false, description: 'Cyrillic is present'});
         else {
-            result = await UpdPass(req.query.newPass, req.query.oldPass, result.res[0].id);
-            if(result == 1)
-                res.json({result: true});
-            else
-                res.json({result: false});
+            let result:any = await CheckAuth(req.cookies.token, 1);
+            if(result == 0)
+                res.json({result: false, status: 401});
+            else {
+                result = await UpdPass(req.query.newPass, req.query.oldPass, result.res[0].id);
+                if(result == 1)
+                    res.json({result: true});
+                else
+                    res.json({result: false, description: 'Password mismatch'});
+            }
         }
     }catch(err:any) {
         res.status(520);
