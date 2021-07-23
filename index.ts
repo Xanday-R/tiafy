@@ -15,7 +15,7 @@ import { UpdPass } from './db/upd_pass';
 
 // Express
 
-import { listen } from './expess/port';
+import { listen } from './other/port';
 
 
 // App.use
@@ -190,6 +190,12 @@ import fs from 'fs';
 import { UploadPhoto } from './jimp/main';
 import { isForInStatement } from 'typescript';
 
+// Token
+
+import { GenerateToken } from './other/gentoken';
+import { UpdToken } from './db/upd_token';
+import { addCookie } from './other/add_cookie';
+
 var upload:any = multer({dest: __dirname + '/photo'});
 
 // Body-parser
@@ -208,7 +214,7 @@ app.post('/upload-img', upload.single('File'), async(req:express.Request, res:ex
             if(data == 0)
                 res.redirect('/auth');
             else {
-                UploadPhoto(a.path, data.res[0].id);
+                UploadPhoto(req.file!.path, data.res[0].id);
                 setTimeout(() => {
                     res.redirect('/profile-settings');
                 }, 2500)
@@ -223,14 +229,20 @@ app.post('*/update-password', urlencodedParser, async(req:express.Request, res:e
     try {
         if(/[\u0400-\u04FF]/.test(`${req.query.newPass}`) === true)
             res.json({result: false, description: 'Cyrillic is present'});
+        else if(req.query.newPass!.length! < 8 || req.query.newPass!.length! > 191)
+            res.json({result: false, description: 'Less than 8 characters or more than 191 characters'});
         else {
             let result:any = await CheckAuth(req.cookies.token, 1);
             if(result == 0)
                 res.json({result: false, status: 401});
             else {
-                result = await UpdPass(req.query.newPass, req.query.oldPass, result.res[0].id);
-                if(result == 1)
+                let resultUP:any = await UpdPass(req.query.newPass, req.query.oldPass, result.res[0].id);
+                if(resultUP == 1) {
+                    let token:any = await GenerateToken();
+                    await UpdToken(token, result.res[0].id);
+                    await addCookie(res, token);
                     res.json({result: true});
+                }
                 else
                     res.json({result: false, description: 'Password mismatch'});
             }

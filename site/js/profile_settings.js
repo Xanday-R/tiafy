@@ -8,6 +8,8 @@ $(() => {
                     alert('Пароли несовпадают')
                 else if(res.data.result === false && res.data.description == 'Cyrillic is present')
                     alert('Присутствует кириллица')
+                else if(res.data.result === false && res.data.description == 'Less than 8 characters or more than 191 characters')
+                    alert('В пароле меньше 8 символов или больше 191 символа!')
                 else if(res.data.result === true) {
                     alert('Пароль изменён')
                     window.location.href = '/profile-settings';
