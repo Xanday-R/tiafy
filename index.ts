@@ -12,6 +12,8 @@ import { CheckAuth } from './db/checkauth';
 import { AddRemLike } from './db/likes';
 import { GetStory } from './db/get_story';
 import { UpdPass } from './db/upd_pass';
+import { UpdToken } from './db/upd_token';
+import { UpdLogin } from './db/upd_login';
 
 // Express
 
@@ -193,7 +195,6 @@ import { isForInStatement } from 'typescript';
 // Token
 
 import { GenerateToken } from './other/gentoken';
-import { UpdToken } from './db/upd_token';
 import { addCookie } from './other/add_cookie';
 
 var upload:any = multer({dest: __dirname + '/photo'});
@@ -231,6 +232,8 @@ app.post('*/update-password', urlencodedParser, async(req:express.Request, res:e
             res.json({result: false, description: 'Cyrillic is present'});
         else if(req.query.newPass!.length! < 8 || req.query.newPass!.length! > 191)
             res.json({result: false, description: 'Less than 8 characters or more than 191 characters'});
+        else if(req.query.newPass == req.query.oldPass)
+            res.json({result: false, description: 'Passwords are the same'});
         else {
             let result:any = await CheckAuth(req.cookies.token, 1);
             if(result == 0)
@@ -245,6 +248,28 @@ app.post('*/update-password', urlencodedParser, async(req:express.Request, res:e
                 }
                 else
                     res.json({result: false, description: 'Password mismatch'});
+            }
+        }
+    }catch(err:any) {
+        res.status(520);
+    }
+})
+
+app.post('*/update-login', urlencodedParser, async(req:express.Request, res:express.Response) => {
+    try {
+        if(req.query.newLogin!.length! < 4 || req.query.newLogin!.length! > 191)
+            res.json({result: false, description: 'Less than 4 characters or more than 191 characters'});
+        else {
+            let result:any = await CheckAuth(req.cookies.token, 1);
+            if(result == 0)
+                res.json({result: false, status: 401});
+            else {
+                if(req.query.newLogin == result.res[0].login)
+                    res.json({result: false, description: 'Logins are the same'});
+                else {
+                    await UpdLogin(req.query.newLogin, result.res[0].id);
+                    res.json({result: true});
+                }
             }
         }
     }catch(err:any) {
