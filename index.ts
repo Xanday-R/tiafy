@@ -184,6 +184,25 @@ app.get('/profile-settings', async(req:express.Request, res:express.Response) =>
     }
 });
 
+app.get('/profile-add', async(req:express.Request, res:express.Response) => {
+    try {
+        if(req.cookies.token === undefined) 
+            res.redirect('/auth');
+        else {
+            let result:any = await CheckAuth(req.cookies.token, 1);
+            if(result == 0) 
+                res.redirect('/auth');
+            else res.render('profile_add', {
+                login: result.res[0].login, 
+                email: result.res[0].email, 
+                photo: result.res[0].photo 
+            });
+        }
+    }catch(err:any) {
+        res.redirect('/');
+    }
+});
+
 // Multer
 
 import multer from 'multer';
@@ -226,7 +245,7 @@ app.post('/upload-img', upload.single('File'), async(req:express.Request, res:ex
     }
 });
 
-app.post('*/update-password', urlencodedParser, async(req:express.Request, res:express.Response) => {
+app.post('*/update-password', async(req:express.Request, res:express.Response) => {
     try {
         if(/[\u0400-\u04FF]/.test(`${req.query.newPass}`) === true)
             res.json({result: false, description: 'Cyrillic is present'});
@@ -255,7 +274,7 @@ app.post('*/update-password', urlencodedParser, async(req:express.Request, res:e
     }
 })
 
-app.post('*/update-login', urlencodedParser, async(req:express.Request, res:express.Response) => {
+app.post('*/update-login', async(req:express.Request, res:express.Response) => {
     try {
         if(req.query.newLogin!.length! < 4 || req.query.newLogin!.length! > 191)
             res.json({result: false, description: 'Less than 4 characters or more than 191 characters'});

@@ -69,6 +69,13 @@ p {
     display: flex;
 }
 
+.content {
+    position: relative;
+    width: 90%;
+    height: 525px;
+    top: 1.5em;
+}
+
 .lenta {
     position: relative;
     width: 5%;
