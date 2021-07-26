@@ -14,6 +14,46 @@ import { GetStory } from './db/get_story';
 import { UpdPass } from './db/upd_pass';
 import { UpdToken } from './db/upd_token';
 import { UpdLogin } from './db/upd_login';
+import { AddDiaryEntry } from './db/add_diaryentry';
+import { AddVideoImage } from './db/add_video_image';
+
+// Multer
+
+import multer from 'multer';
+import fs from 'fs';
+
+import { UploadPhoto } from './jimp/main';
+
+// Token
+
+import { GenerateToken } from './other/gentoken';
+import { addCookie } from './other/add_cookie';
+
+
+let upload:any = multer({
+    dest: __dirname + '/photo', 
+    fileFilter: function(req:Express.Request, file:any, cb:multer.FileFilterCallback) {
+        if(file!.mimetype == 'image/jpeg' || file!.mimetype == 'image/jpg' || file!.mimetype == 'image/png' || file!.mimetype == 'image/gif' || file!.mimetype == 'video/mp4' || file!.mimetype == 'video/avi' || file!.mimetype == 'video/webm' || file!.mimetype == 'image/tiff')
+            cb(null, true);
+        else
+            cb(null, false);
+    }
+}).single('File');
+
+let uploadManyPhoto:any = multer({
+    dest: __dirname + '/photo', 
+    fileFilter: function(req:Express.Request, file:any, cb:multer.FileFilterCallback) {
+        if(file!.mimetype == 'image/jpeg' || file!.mimetype == 'image/jpg' || file!.mimetype == 'image/png' || file!.mimetype == 'image/gif' || file!.mimetype == 'video/mp4' || file!.mimetype == 'video/avi' || file!.mimetype == 'video/webm' || file!.mimetype == 'image/tiff')
+            cb(null, true);
+        else
+            cb(null, false);
+    },
+}).fields([{name: 'File', maxCount: 10}]);
+
+// Body-parser
+
+const bodyParser = require('body-parser');
+const urlencodedParser:any = bodyParser.urlencoded({extended: false});
 
 // Express
 
@@ -30,19 +70,10 @@ app.use(express.static(__dirname + "/site/js"));
 app.use(express.static(__dirname + "/site/css"));
 app.use(cookieParser());
 
-let liked = 0;
+
+let inform:any = null;
 
 // Axios
-
-app.post('*/get', async(req:express.Request, res:express.Response) => {
-    try {
-        let get:any = await Get();
-        res.json({result: true, get: {quote: [[get.quote[0][0], get.quote[0][1], get.quote[0][2]], [get.quote[1][0], get.quote[1][1], get.quote[1][2]]], story: [[get.story[0][0]], [get.story[1][0]]]}, liked});
-    }
-    catch(err:any) {
-        res.json({result: false, status: 520, description: 'Unknown Error'});
-    }
-});
 
 app.post('*/likequote', async(req:express.Request, res:express.Response) => {
     try {
@@ -72,8 +103,7 @@ app.post('*/likestory', async(req:express.Request, res:express.Response) => {
 
 app.get('/', async(req:express.Request, res:express.Response) => {
     try {
-        let result:any = await CheckAuth(req.cookies.token, 2);
-        liked = result.liked;
+        let result:any = await CheckAuth(req.cookies.token, 1);
         if(result == 0)
             res.render('index', {result: true, auth: false});
         else
@@ -189,57 +219,51 @@ app.get('/profile-add', async(req:express.Request, res:express.Response) => {
         if(req.cookies.token === undefined) 
             res.redirect('/auth');
         else {
+            let informL:any = inform;
+            inform = null;
             let result:any = await CheckAuth(req.cookies.token, 1);
             if(result == 0) 
                 res.redirect('/auth');
             else res.render('profile_add', {
-                login: result.res[0].login, 
-                email: result.res[0].email, 
-                photo: result.res[0].photo 
-            });
+                    login: result.res[0].login, 
+                    email: result.res[0].email, 
+                    photo: result.res[0].photo,
+                    inform: informL
+                });
         }
     }catch(err:any) {
         res.redirect('/');
     }
 });
 
-// Multer
-
-import multer from 'multer';
-import fs from 'fs';
-
-import { UploadPhoto } from './jimp/main';
-import { isForInStatement } from 'typescript';
-
-// Token
-
-import { GenerateToken } from './other/gentoken';
-import { addCookie } from './other/add_cookie';
-
-var upload:any = multer({dest: __dirname + '/photo'});
-
-// Body-parser
-
-const bodyParser = require('body-parser');
-const urlencodedParser:any = bodyParser.urlencoded({extended: false});
-
-
-app.post('/upload-img', upload.single('File'), async(req:express.Request, res:express.Response) => {
+app.post('/upload-img', async(req:express.Request, res:express.Response) => {
     try {
-        let a:any = req.file;
-        if(a.mimetype == 'application/x-msdownload')
-            res.status(406);
-        else {
-            let data:any = await CheckAuth(req.cookies.token, 1);
-            if(data == 0)
-                res.redirect('/auth');
-            else {
-                UploadPhoto(req.file!.path, data.res[0].id);
-                setTimeout(() => {
-                    res.redirect('/profile-settings');
-                }, 2500)
+        upload(req, res, async function(err:any) {
+            if(err) {
+                inform = false;
+                res.redirect('/profile-settings');
             }
-        }
+            else {
+                let a:any = req.file;
+                if(a.mimetype == 'application/x-msdownload')
+                    res.status(406);
+                else {
+                    let data:any = await CheckAuth(req.cookies.token, 1);
+                    if(data == 0)
+                        res.redirect('/auth');
+                    else {
+                        if(req.file!.mimetype == 'image/png' || req.file!.mimetype == 'image/jpg' || req.file!.mimetype == 'image/jpeg' || req.file!.mimetype == 'image/gif') {
+                            UploadPhoto(req.file!.path, data.res[0].id);
+                            setTimeout(() => {
+                                res.redirect('/profile-settings');
+                            }, 3000)
+                        }
+                        else
+                            res.redirect('/upload-img');
+                    }
+                }
+            }
+        });
     }catch(err:any) {
         res.status(520);
     }
@@ -294,7 +318,29 @@ app.post('*/update-login', async(req:express.Request, res:express.Response) => {
     }catch(err:any) {
         res.status(520);
     }
-})
+});
+
+app.post('/add-diaryentry', urlencodedParser, async(req:express.Request, res:express.Response) => {
+    try {
+        uploadManyPhoto(req, res, async function(err:any) {
+            if(err) {
+                inform = false;
+                res.redirect('/profile-add');
+            }
+            else {
+                let result:any = await CheckAuth(req.cookies.token, 1);
+                result = await AddDiaryEntry(req.body, result.res[0].id);
+                let file:any = req.files;
+                await AddVideoImage(file!.File, result.id);
+                inform = true;
+                res.redirect('/profile-add');
+            }
+        });
+    }catch(err:any) {
+        inform = false;
+        res.redirect('/profile-add');
+    }
+});
 
 // PORT
 
