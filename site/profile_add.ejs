@@ -70,9 +70,11 @@
         </div>
         <div class="content">
             <% if(inform === true) { %>
-                <%-'<div class="alert alert-success" role="alert" style="border: none;">Запись была успешно сохранена</div>' %>
+                <%-'<div class="alert alert-success" role="alert" style="border: none;">Сохранено</div>' %>
             <% } else if(inform === false) { %> 
                 <%-'<div class="alert alert-danger" role="alert" style="border: none;">Что-то пошло не так</div>' %>
+            <% } else if(inform == 'manyleght') { %> 
+                <%-'<div class="alert alert-danger" role="alert" style="border: none;">Слишком большой заголовок. Максимальное количество символов: 255</div>' %>
             <% } %> 
             <h3>Добавить цитату/историю/запись в дневник</h3>
             <!--Button-->
@@ -89,21 +91,28 @@
                 <div class="collapse" id="DiaryEntry">
                     <div class="card card-body">
                         <h5>Добавить запись в дневник</h5>
-                        <h6>Внимание, видео можно загрузить длительностью не больше одной минуты и количество файлов не более 10!</h6>
+                        <h6>Внимание! Видео можно загрузить длительностью не больше одной минуты и количество файлов не более 10!</h6>
                         <form action="add-diaryentry" method="post" enctype="multipart/form-data">
                             <div>
                                 <input type="file" accept=".jpg, .jpeg, .png, .gif, .mp4, .avi, .webm, .tiff" name='File' multiple> 
                                 <input type="date" name="Date" class="calendar">
                             </div>
-                            <textarea name="Text"></textarea>
-                            <button type="submit" class="btn btn-secondary" >Отправить</button>
+                            <textarea name="Text" class="text"></textarea>
+                            <button type="submit" class="btn btn-secondary">Отправить</button>
                         </form>
                     </div>
                 </div>
                 <div class="collapse" id="LifeStory">
                     <div class="card card-body">
                         <h5>Добавить историю</h5>
-                        Некоторый заполнитель для компонента сворачивания. Эта панель по умолчанию скрыта, но открывается, когда пользователь активирует соответствующий триггер.
+                        <form action="add-story" method="post" enctype="multipart/form-data">
+                            <div>
+                                <input type="file" accept=".jpg, .jpeg, .png, .gif, .tiff" name='File'> 
+                            </div>
+                            <textarea name="Title" class="title" placeholder="Заголовок"></textarea>
+                            <textarea name="Text" class="text" placeholder="Текст"></textarea>
+                            <button type="submit" class="btn btn-secondary">Отправить</button>
+                        </form>
                     </div>
                 </div>
                 <div class="collapse" id="Quote">

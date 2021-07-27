@@ -16,6 +16,7 @@ import { UpdToken } from './db/upd_token';
 import { UpdLogin } from './db/upd_login';
 import { AddDiaryEntry } from './db/add_diaryentry';
 import { AddVideoImage } from './db/add_video_image';
+import { AddStory } from './db/add_story';
 
 // Multer
 
@@ -33,7 +34,7 @@ import { addCookie } from './other/add_cookie';
 let upload:any = multer({
     dest: __dirname + '/photo', 
     fileFilter: function(req:Express.Request, file:any, cb:multer.FileFilterCallback) {
-        if(file!.mimetype == 'image/jpeg' || file!.mimetype == 'image/jpg' || file!.mimetype == 'image/png' || file!.mimetype == 'image/gif' || file!.mimetype == 'video/mp4' || file!.mimetype == 'video/avi' || file!.mimetype == 'video/webm' || file!.mimetype == 'image/tiff')
+        if(file!.mimetype == 'image/jpeg' || file!.mimetype == 'image/jpg' || file!.mimetype == 'image/png' || file!.mimetype == 'image/gif' || file!.mimetype == 'image/tiff')
             cb(null, true);
         else
             cb(null, false);
@@ -244,8 +245,7 @@ app.post('/upload-img', async(req:express.Request, res:express.Response) => {
                 res.redirect('/profile-settings');
             }
             else {
-                let a:any = req.file;
-                if(a.mimetype == 'application/x-msdownload')
+                if(req.file!.mimetype == 'application/x-msdownload')
                     res.status(406);
                 else {
                     let data:any = await CheckAuth(req.cookies.token, 1);
@@ -329,16 +329,49 @@ app.post('/add-diaryentry', urlencodedParser, async(req:express.Request, res:exp
             }
             else {
                 let result:any = await CheckAuth(req.cookies.token, 1);
-                result = await AddDiaryEntry(req.body, result.res[0].id);
-                let file:any = req.files;
-                await AddVideoImage(file!.File, result.id);
-                inform = true;
-                res.redirect('/profile-add');
+                if(result == 0)
+                    res.redirect('/auth');
+                else {
+                    result = await AddDiaryEntry(req.body, result.res[0].id);
+                    let file:any = req.files;
+                    await AddVideoImage(file!.File, result.id);
+                    inform = true;
+                    res.redirect('/profile-add');
+                }
             }
         });
     }catch(err:any) {
         inform = false;
         res.redirect('/profile-add');
+    }
+});
+
+app.post('/add-story', async(req:express.Request, res:express.Response) => {
+    try {
+        upload(req, res, async function(err:any) {
+            if(err) {
+                inform = false;
+                res.redirect('/profile-add');
+            }
+            else {
+                let result:any = await CheckAuth(req.cookies.token, 1);
+                if(result == 0)
+                    res.redirect('/auth');
+                else {
+                    console.log(req.body.Title.length);
+                    if(req.body.Title.length > 255) {
+                        inform = 'manyleght';
+                        res.redirect('/profile-add');
+                    } else {
+                        await AddStory(req.file!.path, req.body, result.res[0].id);
+                        inform = true;
+                        res.redirect('/profile-add');
+                    }
+                }
+            }
+        });
+    }catch(err:any) {
+        res.status(520);
     }
 });
 
