@@ -135,7 +135,7 @@ h3 {
     text-align: center;
 }
 
-.title {
+.title, .author {
     resize: none;
     text-align: center;
     margin-top: 12px;

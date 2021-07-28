@@ -73,8 +73,6 @@
                 <%-'<div class="alert alert-success" role="alert" style="border: none;">Сохранено</div>' %>
             <% } else if(inform === false) { %> 
                 <%-'<div class="alert alert-danger" role="alert" style="border: none;">Что-то пошло не так</div>' %>
-            <% } else if(inform == 'manyleght') { %> 
-                <%-'<div class="alert alert-danger" role="alert" style="border: none;">Слишком большой заголовок. Максимальное количество символов: 255</div>' %>
             <% } %> 
             <h3>Добавить цитату/историю/запись в дневник</h3>
             <!--Button-->
@@ -118,7 +116,11 @@
                 <div class="collapse" id="Quote">
                     <div class="card card-body">
                         <h5>Добавить цитату</h5>
-                        Некоторый заполнитель для компонента сворачивания. Эта панель по умолчанию скрыта, но открывается, когда пользователь активирует соответствующий триггер.
+                        <form action="add-quote" method="post">
+                            <input type="text" class="author" name="Author" placeholder="Введите автора">
+                            <textarea name="Text" class="text" placeholder="Текст"></textarea>
+                            <button type="submit" class="btn btn-secondary">Отправить</button>
+                        </form>
                     </div>
                 </div>
             </div>

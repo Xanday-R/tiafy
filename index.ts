@@ -17,6 +17,7 @@ import { UpdLogin } from './db/upd_login';
 import { AddDiaryEntry } from './db/add_diaryentry';
 import { AddVideoImage } from './db/add_video_image';
 import { AddStory } from './db/add_story';
+import { AddQuote } from './db/add_quote';
 
 // Multer
 
@@ -322,15 +323,16 @@ app.post('*/update-login', async(req:express.Request, res:express.Response) => {
 
 app.post('/add-diaryentry', urlencodedParser, async(req:express.Request, res:express.Response) => {
     try {
-        uploadManyPhoto(req, res, async function(err:any) {
-            if(err) {
-                inform = false;
-                res.redirect('/profile-add');
-            }
-            else {
-                let result:any = await CheckAuth(req.cookies.token, 1);
-                if(result == 0)
-                    res.redirect('/auth');
+        let result:any = await CheckAuth(req.cookies.token, 1);
+        if(result == 0)
+            res.redirect('/auth');
+        else {
+            uploadManyPhoto(req, res, async function(err:any) {
+                if(err) {
+                    console.log(err);
+                    inform = false;
+                    res.redirect('/profile-add');
+                }
                 else {
                     result = await AddDiaryEntry(req.body, result.res[0].id);
                     let file:any = req.files;
@@ -338,8 +340,8 @@ app.post('/add-diaryentry', urlencodedParser, async(req:express.Request, res:exp
                     inform = true;
                     res.redirect('/profile-add');
                 }
-            }
-        });
+            });
+        }
     }catch(err:any) {
         inform = false;
         res.redirect('/profile-add');
@@ -348,28 +350,39 @@ app.post('/add-diaryentry', urlencodedParser, async(req:express.Request, res:exp
 
 app.post('/add-story', async(req:express.Request, res:express.Response) => {
     try {
-        upload(req, res, async function(err:any) {
-            if(err) {
-                inform = false;
-                res.redirect('/profile-add');
-            }
-            else {
-                let result:any = await CheckAuth(req.cookies.token, 1);
-                if(result == 0)
-                    res.redirect('/auth');
-                else {
-                    console.log(req.body.Title.length);
-                    if(req.body.Title.length > 255) {
-                        inform = 'manyleght';
-                        res.redirect('/profile-add');
-                    } else {
-                        await AddStory(req.file!.path, req.body, result.res[0].id);
-                        inform = true;
-                        res.redirect('/profile-add');
-                    }
+        let result:any = await CheckAuth(req.cookies.token, 1);
+        if(result == 0)
+            res.redirect('/auth');
+        else {
+            upload(req, res, async function(err:any) {
+                if(err) {
+                    inform = false;
+                    res.redirect('/profile-add');
                 }
-            }
-        });
+                else {
+                    let path:any = (req.file === undefined) ? null : req.file!.path;
+                    await AddStory(path, req.body, result.res[0].id);
+                    inform = true;
+                    res.redirect('/profile-add');
+                }
+            });
+        }
+    }catch(err:any) {
+        res.status(520);
+    }
+});
+
+app.post('/add-quote', async(req:express.Request, res:express.Response) => {
+    try {
+        console.log(1);
+        let result:any = await CheckAuth(req.cookies.token, 1);
+        if(result == 0)
+            res.redirect('/auth');
+        else {
+            await AddQuote(req.body, result.res[0].id);
+            inform = true;
+            res.redirect('/profile-add');
+        }
     }catch(err:any) {
         res.status(520);
     }
