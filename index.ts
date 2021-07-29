@@ -7,7 +7,6 @@ export let App:any = app;
 
 // DB
 
-import { Get } from './db/get';
 import { CheckAuth } from './db/checkauth';
 import { AddRemLike } from './db/likes';
 import { GetStory } from './db/get_story';
@@ -60,6 +59,7 @@ const urlencodedParser:any = bodyParser.urlencoded({extended: false});
 // Express
 
 import { listen } from './other/port';
+import { GetDiaryUser } from './db/get_diaryentry_user';
 
 
 // App.use
@@ -186,11 +186,14 @@ app.get('/profile', async(req:express.Request, res:express.Response) => {
             let result:any = await CheckAuth(req.cookies.token, 1);
             if(result == 0) 
                 res.redirect('/auth');
-            else res.render('profile', {
-                login: result.res[0].login, 
-                email: result.res[0].email, 
-                photo: result.res[0].photo 
-            });
+            else  {
+                console.log(await GetDiaryUser(result.res[0].id));
+                res.render('profile', {
+                    login: result.res[0].login, 
+                    email: result.res[0].email, 
+                    photo: result.res[0].photo 
+                });
+            }
         }
     }catch(err:any) {
         res.redirect('/');
@@ -237,6 +240,8 @@ app.get('/profile-add', async(req:express.Request, res:express.Response) => {
         res.redirect('/');
     }
 });
+
+// Post
 
 app.post('/upload-img', async(req:express.Request, res:express.Response) => {
     try {
@@ -336,7 +341,7 @@ app.post('/add-diaryentry', urlencodedParser, async(req:express.Request, res:exp
                 else {
                     result = await AddDiaryEntry(req.body, result.res[0].id);
                     let file:any = req.files;
-                    await AddVideoImage(file!.File, result.id);
+                    await AddVideoImage(file!.File, result[0]);
                     inform = true;
                     res.redirect('/profile-add');
                 }
