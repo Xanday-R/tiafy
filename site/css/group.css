@@ -1,0 +1,40 @@
+/* Body */
+
+.Card {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.card-text, .card-header {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.card-text {
+    margin: 0px;
+}
+
+h3 {
+    margin-top: 16px;
+}
+
+/* Body */
+
+.bodyD {
+    width: 20%;
+    margin: 1% 2.5%;
+    height: 150px;
+}
+
+.bodyS {
+    width: 45%;
+    margin: 1% 2.5%;
+    height: 150px;
+}
+
+.bodyQ {
+    width: 45%;
+    margin: 1% 2.5%;
+}

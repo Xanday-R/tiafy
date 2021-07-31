@@ -1,8 +1,8 @@
 /* Основная часть */
 
-p {
+/* p {
     margin: 0px;
-}
+} */
 
 /* IMG */
 
@@ -96,6 +96,10 @@ h3 {
     font-family: 'Josefin Sans', sans-serif;
 }
 
+.p {
+    margin: 0px;
+}
+
 /* MAIN */
 
 .main {
@@ -132,7 +136,6 @@ h3 {
 
 .card {
     margin-top: 16px;
-    text-align: center;
 }
 
 .title, .author {

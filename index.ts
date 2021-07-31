@@ -17,6 +17,9 @@ import { AddDiaryEntry } from './db/add_diaryentry';
 import { AddVideoImage } from './db/add_video_image';
 import { AddStory } from './db/add_story';
 import { AddQuote } from './db/add_quote';
+import { GetDiaryUser } from './db/get_diaryentry_user';
+import { GetStoryUser } from './db/get_story_user';
+import { GetQuoteUser } from './db/get_quote_user';
 
 // Multer
 
@@ -59,8 +62,7 @@ const urlencodedParser:any = bodyParser.urlencoded({extended: false});
 // Express
 
 import { listen } from './other/port';
-import { GetDiaryUser } from './db/get_diaryentry_user';
-
+import { isConstructorDeclaration } from 'typescript';
 
 // App.use
 
@@ -187,11 +189,17 @@ app.get('/profile', async(req:express.Request, res:express.Response) => {
             if(result == 0) 
                 res.redirect('/auth');
             else  {
-                console.log(await GetDiaryUser(result.res[0].id));
+                let data:any = [0, 0, 0];
+                data[0] = await GetDiaryUser(result.res[0].id);
+                data[1] = await GetStoryUser(result.res[0].id);
+                data[2] = await GetQuoteUser(result.res[0].id);
                 res.render('profile', {
                     login: result.res[0].login, 
                     email: result.res[0].email, 
-                    photo: result.res[0].photo 
+                    photo: result.res[0].photo,
+                    diary: data[0],
+                    story: data[1],
+                    quote: data[2]
                 });
             }
         }
@@ -338,6 +346,10 @@ app.post('/add-diaryentry', urlencodedParser, async(req:express.Request, res:exp
                     inform = false;
                     res.redirect('/profile-add');
                 }
+                else if(req.body.Text.length < 8) {
+                    inform = 'Little symbols or many symbols';
+                    res.redirect('/profile-add');
+                }
                 else {
                     result = await AddDiaryEntry(req.body, result.res[0].id);
                     let file:any = req.files;
@@ -364,6 +376,13 @@ app.post('/add-story', async(req:express.Request, res:express.Response) => {
                     inform = false;
                     res.redirect('/profile-add');
                 }
+                else if(req.body.Text.length < 8 || req.body.Title.length < 8 || req.body.Title.length > 255) {
+                    inform = 'Little symbols or many symbols';
+                    res.redirect('/profile-add');
+                } else if(/[0-9]/.test(req.body.Title) === true) {
+                    inform = 'There is a latin or numbers';
+                    res.redirect('/profile-add');
+                }
                 else {
                     let path:any = (req.file === undefined) ? null : req.file!.path;
                     await AddStory(path, req.body, result.res[0].id);
@@ -377,16 +396,24 @@ app.post('/add-story', async(req:express.Request, res:express.Response) => {
     }
 });
 
-app.post('/add-quote', async(req:express.Request, res:express.Response) => {
+app.post('/add-quote', urlencodedParser, async(req:express.Request, res:express.Response) => {
     try {
-        console.log(1);
-        let result:any = await CheckAuth(req.cookies.token, 1);
-        if(result == 0)
-            res.redirect('/auth');
-        else {
-            await AddQuote(req.body, result.res[0].id);
-            inform = true;
+        if(req.body.Text.length < 8 || req.body.Author.length < 4 || req.body.Author.length > 255) {
+            inform = 'Little symbols or many symbols';
             res.redirect('/profile-add');
+        }
+        else if(/[0-9]/.test(req.body.Author) === true || /[0-9]/.test(req.body.Text) === true || /^[А-я\u00C0-\u00ff\s'\.,-\/#!$%\^&\*;:{}=\-_`~()]+$/.test(req.body.Text) === false || /^[А-я\u00C0-\u00ff\s'\.,-\/#!$%\^&\*;:{}=\-_`~()]+$/.test(req.body.Author) === false) {
+            inform = 'There is a latin or numbers';
+            res.redirect('/profile-add');
+        }else {
+            let result:any = await CheckAuth(req.cookies.token, 1);
+            if(result == 0)
+                res.redirect('/auth');
+            else {
+                await AddQuote(req.body, result.res[0].id);
+                inform = true;
+                res.redirect('/profile-add');
+            }
         }
     }catch(err:any) {
         res.status(520);
