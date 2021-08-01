@@ -1,0 +1,23 @@
+/* Content */
+
+.content {
+    position: relative;
+    display: flex;
+    justify-content: space-around;
+}
+
+.alert-danger {
+    position: relative;
+    top: 8em;
+    margin-bottom: 10px;
+}
+
+.card {
+    top: 2em;
+    height: 30em;
+    width: 90%;
+}
+
+.card-body {
+    text-align: center;
+}

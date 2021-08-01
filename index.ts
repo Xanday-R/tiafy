@@ -17,9 +17,8 @@ import { AddDiaryEntry } from './db/add_diaryentry';
 import { AddVideoImage } from './db/add_video_image';
 import { AddStory } from './db/add_story';
 import { AddQuote } from './db/add_quote';
-import { GetDiaryUser } from './db/get_diaryentry_user';
-import { GetStoryUser } from './db/get_story_user';
-import { GetQuoteUser } from './db/get_quote_user';
+
+import { GetAll } from './db/get_all';
 
 // Multer
 
@@ -62,7 +61,7 @@ const urlencodedParser:any = bodyParser.urlencoded({extended: false});
 // Express
 
 import { listen } from './other/port';
-import { isConstructorDeclaration } from 'typescript';
+import { GetDiaryOrStoryForUser } from './db/get_for_user';
 
 // App.use
 
@@ -189,10 +188,12 @@ app.get('/profile', async(req:express.Request, res:express.Response) => {
             if(result == 0) 
                 res.redirect('/auth');
             else  {
-                let data:any = [0, 0, 0];
-                data[0] = await GetDiaryUser(result.res[0].id);
-                data[1] = await GetStoryUser(result.res[0].id);
-                data[2] = await GetQuoteUser(result.res[0].id);
+                let data:any = new GetAll(result.res[0].id);
+                data = [
+                    await data.GetDiary(),
+                    await data.GetStory(),
+                    await data.GetQuote()
+                ]
                 res.render('profile', {
                     login: result.res[0].login, 
                     email: result.res[0].email, 
@@ -246,6 +247,28 @@ app.get('/profile-add', async(req:express.Request, res:express.Response) => {
         }
     }catch(err:any) {
         res.redirect('/');
+    }
+});
+
+app.get('/user', async(req:express.Request, res:express.Response) => {
+    try {
+        let result:any = await CheckAuth(req.cookies.token, 1);
+        if(result == 0)
+            res.redirect('/auth');
+        else {
+            if(req.query.type === undefined || req.query.id === undefined || req.query.type !== 'diary' && req.query.type !== 'story') 
+                res.redirect('/profile');
+            else {
+                res.render('user', {
+                    login: result.res[0].login, 
+                    email: result.res[0].email, 
+                    photo: result.res[0].photo,
+                    result: await GetDiaryOrStoryForUser(req.query.type, req.query.id, result.res[0].id)
+                });
+            }
+        }
+    }catch(err:any) {
+        res.status(520);
     }
 });
 

@@ -6,6 +6,9 @@ class Story extends React.Component {
     constructor(props) {
         super(props);
         this.src = "img/heart.svg";
+        this.img = this.props.img;
+        if(this.img == '#')
+            this.img = "img/banner.png"
         this.likes = this.props.likes;
         if(this.props.liked == 'false')
             this.state = { liked: false };
@@ -17,7 +20,7 @@ class Story extends React.Component {
     render() {
         return (
             <div className="card" style={{ "width": "80rem" }}>
-                <img src={this.props.img} style={{ "width": "25%" }} className="card-img"></img>
+                <img src={this.img} className="card-img"></img>
                 <div className="card-body">
                     <h5 className="card-title">{this.props.title}</h5>
                     <p className="card-text">{this.props.text}</p>
