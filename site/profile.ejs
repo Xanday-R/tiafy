@@ -82,27 +82,38 @@
                 <div class="collapse" id="DiaryEntry">
                     <div class="card card-body Card">
                         <% for(i in diary) { %> 
-                            <%-`<div class="card bodyD"><h5 class="card-header">${diary[i].date}</h5><div class="card-body" style="text-align: center;"><p class="card-text">${diary[i].text}</p><a href="/user?type=diary&id=${diary[i].id}" class="btn btn-secondary btn-card">Открыть</a></div></div>`%>
-                        <% } %>                      
+                            <%-`<div class="card bodyD"><h5 class="card-header">${diary[i].date} <img src="img/trash-fill.png" id="${diary[i].id}" type="diary" class="diary"></h5><div class="card-body" style="text-align: center;"><p class="card-text">${diary[i].text}</p><a href="/user?type=diary&id=${diary[i].id}" class="btn btn-secondary btn-card">Открыть</a></div></div>`%>
+                        <% } %> 
+                        <% if(diary == 0) { %>
+                            <%-`<h6>Данные не найдены</h6>`%> 
+                        <% } %>                     
                     </div>
                 </div>
                 <div class="collapse" id="LifeStory">
                     <div class="card card-body Card">
                         <% for(i in story) { %> 
-                            <%-`<div class="card bodyS"><h5 class="card-header">${story[i].date} - ${story[i].name}</h5><div class="card-body" style="text-align: center;"><p class="card-text">${story[i].text}</p><a href="/user?type=story&id=${story[i].id}" class="btn btn-secondary btn-card">Открыть</a></div></div>`%>
+                            <%-`<div class="card bodyS"><h5 class="card-header">${story[i].date} - ${story[i].name} <img src="img/trash-fill.png" id="${story[i].id}" type="story" class="story"> </h5><div class="card-body" style="text-align: center;"><p class="card-text">${story[i].text}</p><a href="/user?type=story&id=${story[i].id}" class="btn btn-secondary btn-card">Открыть</a></div></div>`%>
                         <% } %> 
+                        <% if(story == 0) { %>
+                            <%-`<h6>Данные не найдены</h6>`%> 
+                        <% } %>   
                     </div>
                 </div>
                 <div class="collapse" id="Quote">
                     <div class="card card-body Card">
                         <% for(i in quote) { %> 
-                            <%-`<div class="card bodyQ"><h5 class="card-header">${quote[i].date}</h5><div class="card-body"><blockquote class="blockquote mb-0"><p>${quote[i].text}</p><footer class="blockquote-footer"><cite>${quote[i].author}</cite></footer></blockquote></div></div>`%> 
+                            <%-`<div class="card bodyQ"><h5 class="card-header">${quote[i].date} <img src="img/trash-fill.png" id="${quote[i].id}" type="quote" class="quote"></h5><div class="card-body"><blockquote class="blockquote mb-0"><p>${quote[i].text}</p><footer class="blockquote-footer"><cite>${quote[i].author}</cite></footer></blockquote></div></div>`%> 
                         <% } %> 
+                        <% if(quote == 0) { %>
+                            <%-`<h6>Данные не найдены</h6>`%> 
+                        <% } %>   
                     </div>
                 </div>
                 <div class="div"></div>
             </div>
         </div>
     </div>
+    <h3 class="4" id="8 9">1</h3>
+    <script src="js/profile.js"></script>
 </body>
 </html>

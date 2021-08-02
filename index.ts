@@ -63,6 +63,7 @@ const urlencodedParser:any = bodyParser.urlencoded({extended: false});
 // Express
 
 import { listen } from './other/port';
+import { DeleteData } from './db/delete';
 
 // App.use
 
@@ -371,6 +372,23 @@ app.post('*/update-login', async(req:express.Request, res:express.Response) => {
     }catch(err:any) {
         res.status(520);
     }
+});
+
+app.post('*/delete', async(req:express.Request, res:express.Response) => {
+        if(req.query.type === undefined || req.query.id === undefined)
+            res.status(400);
+        else {
+            let result:any = await CheckAuth(req.cookies.token, 1);
+            if(result == 0)
+                res.json({result: false, auth: false});
+            else {              
+                result = await DeleteData(req.query.type, req.query.id, result.res[0].id)
+                if(result == 1)
+                    res.json({result: true});
+                else
+                    res.json({result: false, status: 403});
+            }
+        }
 });
 
 app.post('/add-diaryentry', urlencodedParser, async(req:express.Request, res:express.Response) => {

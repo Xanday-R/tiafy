@@ -1,4 +1,4 @@
-/* Body */
+/* Content */
 
 .Card {
     display: flex;
@@ -18,6 +18,19 @@
 
 h3 {
     margin-top: 16px;
+}
+
+h6 {
+    margin: 0px;
+}
+
+h5 {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    min-height: 59px;
+    align-content: center;
 }
 
 /* Body */
@@ -40,4 +53,16 @@ h3 {
     width: 45%;
     min-width: 250px;
     margin: 1% 2.5%;
+}
+
+/* Trash */
+
+.quote, .story, .diary {
+    position: relative;
+    width: 20px;
+    height: 20px;
+}
+
+.quote:hover, .story:hover, .diary:hover {
+    cursor: pointer;
 }

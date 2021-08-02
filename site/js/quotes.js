@@ -1,6 +1,6 @@
 $(() => {
     $('.rImg').click(async(e) => {
-        res = await axios.post(`http:/127.0.0.1:80/likequote?id=${e.target.attributes.id.value}`);
+        let res = await axios.post(`http:/127.0.0.1:80/likequote?id=${e.target.attributes.id.value}`);
         if(res.data.auth === false) 
             alert('Авторизируйтесь!')
         else {
