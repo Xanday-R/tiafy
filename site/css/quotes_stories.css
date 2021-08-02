@@ -1,0 +1,55 @@
+/* Content */
+
+.content {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: center;
+}
+
+.alert-danger {
+    position: relative;
+    top: 8em;
+    text-align: center;
+}
+
+.card {
+    width: 50%;
+    top: 2em;
+    margin-bottom: 16px;
+}
+
+.rImg {
+    width: 1.65em;
+    height: 1.65em;
+}
+
+.img {
+    display: flex;
+}
+
+.blockquote {
+    font-size: 1rem;
+}
+
+a {
+    text-decoration: none;
+    color: #212529;;
+}
+
+.p {
+    margin-bottom: 0px;
+}
+
+@media screen and (max-width: 1024px) {
+    .card {
+        width: 80%;
+        top: 2em;
+        margin-bottom: 16px;
+    }
+    .blockquote {
+        font-size: 1.25rem;
+    }
+}

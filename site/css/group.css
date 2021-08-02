@@ -24,17 +24,20 @@ h3 {
 
 .bodyD {
     width: 20%;
+    min-width: 250px;
     margin: 1% 2.5%;
     height: 150px;
 }
 
 .bodyS {
     width: 45%;
+    min-width: 250px;
     margin: 1% 2.5%;
     height: 150px;
 }
 
 .bodyQ {
     width: 45%;
+    min-width: 250px;
     margin: 1% 2.5%;
 }

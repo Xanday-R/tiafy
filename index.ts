@@ -17,6 +17,8 @@ import { AddDiaryEntry } from './db/add_diaryentry';
 import { AddVideoImage } from './db/add_video_image';
 import { AddStory } from './db/add_story';
 import { AddQuote } from './db/add_quote';
+import { GetDiaryOrStoryForUser } from './db/get_for_user';
+import { GetDiaryOrStory } from './db/get';
 
 import { GetAll } from './db/get_all';
 
@@ -61,7 +63,6 @@ const urlencodedParser:any = bodyParser.urlencoded({extended: false});
 // Express
 
 import { listen } from './other/port';
-import { GetDiaryOrStoryForUser } from './db/get_for_user';
 
 // App.use
 
@@ -270,6 +271,21 @@ app.get('/user', async(req:express.Request, res:express.Response) => {
     }catch(err:any) {
         res.status(520);
     }
+});
+
+app.get('/quotes', async(req:express.Request, res:express.Response) => {
+        let result:any = await CheckAuth(req.cookies.token, 2);
+        if(result == 0)
+            res.render('quotes', {result: true, auth: false, data: await GetDiaryOrStory('quote')});
+        else res.render('quotes', {
+                result: true, 
+                auth: true,
+                login: result.res[0].login, 
+                email: result.res[0].email, 
+                photo: result.res[0].photo,
+                data: await GetDiaryOrStory('quote'),
+                like: result.liked
+            });
 });
 
 // Post
