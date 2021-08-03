@@ -4,10 +4,8 @@ $(() => {
         if(res.data.auth === false) 
             alert('Авторизируйтесь!');
         else if(res.data.status == 403)
-            alert('Записи не существует');
-        else {
+            alert('Записи не существует или вы не имеете к ней доступа');
+        else
             $(`#${e.target.attributes.id.value}.${e.target.attributes.type.value}`).parent().parent().remove();
-            alert('Удалено');
-        }
     });
 });

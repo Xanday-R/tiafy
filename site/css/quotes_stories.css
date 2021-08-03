@@ -9,7 +9,7 @@
     align-items: center;
 }
 
-.alert-danger {
+.alert-danger, .alert-secondary {
     position: relative;
     top: 8em;
     text-align: center;

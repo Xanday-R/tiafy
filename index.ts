@@ -275,6 +275,7 @@ app.get('/user', async(req:express.Request, res:express.Response) => {
 });
 
 app.get('/quotes', async(req:express.Request, res:express.Response) => {
+    try{
         let result:any = await CheckAuth(req.cookies.token, 2);
         if(result == 0)
             res.render('quotes', {result: true, auth: false, data: await GetDiaryOrStory('quote')});
@@ -287,6 +288,28 @@ app.get('/quotes', async(req:express.Request, res:express.Response) => {
                 data: await GetDiaryOrStory('quote'),
                 like: result.liked
             });
+    }catch(err:any) {
+        res.render('quotes', {result: false, auth: false, status: 520});
+    }
+});
+
+app.get('/stories', async(req:express.Request, res:express.Response) => {
+    try {
+        let result:any = await CheckAuth(req.cookies.token, 2);
+        if(result == 0)
+            res.render('stories', {result: true, auth: false, data: await GetDiaryOrStory('story')});
+        else res.render('stories', {
+                result: true, 
+                auth: true,
+                login: result.res[0].login, 
+                email: result.res[0].email, 
+                photo: result.res[0].photo,
+                data: await GetDiaryOrStory('story'),
+                like: result.liked
+            });
+    }catch (err:any) {
+        res.render('stories', {result: false, auth: false, status: 520});
+    }
 });
 
 // Post

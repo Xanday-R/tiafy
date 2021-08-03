@@ -44,6 +44,7 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
+                <a class ="nav-link" href="/profile">Профиль</a>
                 <a class ="nav-link" href="/">Главная страница</a>
                 <a class ="nav-link" href="/about">О сайте</a>
             </div>
@@ -55,11 +56,41 @@
             <%- `<h3 class='alert-danger'>Запись/История не найдена. Возможно, вы пытаетесь открыть историю/запись другого пользователя</h3>` %>
         <% } else if(result[0].name === undefined) { %>
             <%- 
-                `<div class="card text-dark bg-light mb-3"><div class="card-header">${result[0].date}</div><div class="card-body"><p class="card-text">${result[0].text}</p></div></div>`
-            %> 
+                `<div class="card text-dark bg-light mb-3">
+                    <div class="card-header">${result[0][0].date}</div>
+                    <div class="card-body">
+                        <p class="card-text">${result[0][0].text}</p>
+                    </div>`
+            %>
+                    <% if(result[1].length != 0) { %>
+                        <%- `<div class="accordion-item">
+                            <h2 class="accordion-header" id="headingOne">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                Фото/Видео
+                                </button>
+                            </h2>
+                            <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                <div class="accordion-body"> `%>
+                                    <%-`<div class="IMGVIDEO card-body">`%> 
+                                        <% for(i in result[1]) { %>
+                                            <% if(result[1][i].type == 'video') { %> 
+                                                <%-`<video controls><source src="${result[1][i].url}" type="video/mp4"></video>` %>
+                                            <% } else { %> 
+                                                <%-`<img src="${result[1][i].url}" class="imgfile"></img>`%>
+                                            <% } %> 
+                                        <% } %>
+                                    <%- `</div>`  %> 
+                                <%- `</div>
+                            </div>
+                        </div>` %> 
+                    <% } %>
+                <%- `</div>` %>
         <% } else { %> 
+            <% if(result[0].img == '#') {
+                result[0].img = 'img/banner.png';
+            } %> 
             <%- 
-                `<div class="card text-dark bg-light mb-3"><div class="card-header">${result[0].date}</div><div class="card-body"><h5 class="card-title">${result[0].name}</h5><p class="card-text">${result[0].text}</p></div></div>`
+                `<div class="card text-dark bg-light mb-3"><div class="card-header">${result[0].date}</div><img src="${result[0].img}" class="card-img"></img><div class="card-body"><h5 class="card-title">${result[0].name}</h5><p class="card-text">${result[0].text}</p></div></div>`
             %> 
         <% } %> 
         <div class="div"></div>

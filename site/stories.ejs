@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tiafy - Цитаты</title>
+    <title>Tiafy - Истории</title>
     <link rel="shortcut icon" href="img/icon.png" type="image/x-icon">
     <!--React-->
     <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
@@ -45,9 +45,9 @@
               <% if(result === false && auth === false && status == 520) { %>
                 <%- '<a class ="nav-link" href="/">Главная страница</a> <a class ="nav-link" href="/about">О сайте</a>' %>
               <% }else if(auth === true) { %> 
-                <%- '<a class ="nav-link" href="/profile">Профиль</a> <a class ="nav-link" href="/">Главная страница</a> <a class ="nav-link" href="/stories">Смотреть истории</a> <a class ="nav-link" href="/about">О сайте</a>' %> 
+                <%- '<a class ="nav-link" href="/profile">Профиль</a> <a class ="nav-link" href="/">Главная страница</a> <a class ="nav-link" href="/quotes">Смотреть цитаты</a> <a class ="nav-link" href="/about">О сайте</a>' %> 
               <% } else if(auth === false) { %> 
-                <%- '<a class ="nav-link" href="/auth">Авторизироваться</a> <a class ="nav-link" href="/">Главная страница</a> <a class ="nav-link" href="/stories">Смотреть истории</a> <a class ="nav-link" href="/about">О сайте</a>'  %> 
+                <%- '<a class ="nav-link" href="/auth">Авторизироваться</a> <a class ="nav-link" href="/">Главная страница</a> <a class ="nav-link" href="/quotes">Смотреть цитаты</a> <a class ="nav-link" href="/about">О сайте</a>'  %> 
               <% } %> 
             </div>
           </div>
@@ -58,7 +58,7 @@
             <%- `<h3 class='alert-danger'>Неизвестная ошибка. Попробуйте позже</h3>`  %> 
         <% } else { %>
             <% if(data[0].length == 0) { %>
-              <%- `<h3 class='alert-secondary'>Данные не найдены</h3>`  %> 
+                <%- `<h3 class='alert-secondary'>Данные не найдены</h3>`  %> 
             <% } %> 
             <% for(i in data[0]) { %>
                 <% 
@@ -66,15 +66,18 @@
                 %>
                 <% for(ii in like) { %>
                     <% 
-                        if(data[0][i].id == like[ii].idrecords && like[ii].type == 'quote')
+                        if(data[0][i].id == like[ii].idrecords && like[ii].type == 'story')
                             liked = 'img/heart-fill.svg';
                     %> 
                 <% } %>
-                <%- `<div class="card"><div class="card-header blockquote mb-0">${data[0][i].date}</div><div class="card-body"><blockquote class="blockquote mb-0"><p>${data[0][i].text}</p><footer class="blockquote-footer"><cite>${data[0][i].author}</cite></footer></blockquote><div class='img'><img src="${liked}" class="rImg" id="${data[0][i].id}" likes="${data[0][i].likes}"><p class="${data[0][i].id} p">: ${data[0][i].likes}</p></div></div><div class="card-footer"><a href="/users?id=${data[0][i].appendor}" class="blockquote mb-0"><cite>Добавлено пользователем ${data[1][i]}</cite></a></div></div>`  %> 
+                <% if(data[0][i].img == '#')
+                    data[0][i].img = 'img/banner.png';
+                %> 
+                <%- `<div class="card"><div class="card-header blockquote mb-0"><a href="/story?id=${data[0][i].id}" class="blockquote mb-0">${data[0][i].date} - ${data[0][i].name}</a></div><img src="${data[0][i].img}" class="card-img"></img><div class="card-body"><blockquote class="blockquote mb-0"><p>${data[0][i].text}</p></blockquote><div class='img'><img src="${liked}" class="rImg" id="${data[0][i].id}" likes="${data[0][i].likes}"><p class="${data[0][i].id} p">: ${data[0][i].likes}</p></div></div><div class="card-footer"><a href="/users?id=${data[0][i].appendor}" class="blockquote mb-0"><cite>Добавлено пользователем ${data[1][i]}</cite></a></div></div>`  %> 
             <% } %>  
         <% } %>  
         <div class="div"></div>
     </div>
-    <script src="js/quotes.js"></script>
+    <script src="js/stories.js"></script>
 </body>
 </html>
