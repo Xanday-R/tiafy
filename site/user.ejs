@@ -67,9 +67,7 @@
             <% if(result[0].img == '#') {
                 result[0].img = 'img/banner.png';
             } %> 
-            <%- 
-                `<div class="card text-dark bg-light mb-3"><div class="card-header">${result[0].date}</div><img src="${result[0].img}" class="card-img"></img><div class="card-body"><h5 class="card-title">${result[0].name}</h5><p class="card-text">${result[0].text}</p></div></div>`
-            %> 
+            <%- `<div class="card text-dark bg-light mb-3"><div class="card-header">${result[0].date}</div><img src="${result[0].img}" class="card-img"></img><div class="card-body"><h5 class="card-title">${result[0].name}</h5><p class="card-text">${result[0].text}</p></div></div>`%> 
         <% } %> 
         <div class="div"></div>
     </div>

@@ -1,0 +1,112 @@
+.content {
+    position: relative;
+    top: 1.5em;
+    display: flex;
+}
+
+/* Profile */
+
+.profile {
+    width: 50%;
+    text-align: center;
+}
+
+.icon {
+    border-radius: 0%;
+    width: 15em;
+    height: 15em;
+    margin-bottom: 7px;
+}
+
+h3 {
+    margin: 0px;
+    font-family: 'Josefin Sans', sans-serif;
+}
+
+/* Data */
+
+.data {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+
+.Collapse {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+}
+
+.Card {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.card {
+    margin-top: 16px;
+    width: 100%;
+}
+
+/* Text */
+
+p, h5 {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.p {
+    margin-bottom: 0px;
+}
+
+/* IMG */
+
+.rImg {
+    width: 1.65em;
+    height: 1.65em;
+}
+
+.img {
+    display: flex;
+}
+
+@media screen and (min-height: 768px) {
+
+    .card-text {
+        font-size: 50%;
+    }
+    .content {
+        display: flex;
+        width: 100%;
+        height: 100%;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .btn-group {
+        width: 100%;
+        height: 100px;
+        margin-top: 1.5em;
+    }
+
+    .bodyS {
+        height: 90%;
+    }
+
+    .data {
+        width: 100%;
+    }
+
+    .blockquote, .rImg, p {
+        font-size: 1.25rem;
+    }
+    
+    h4 {
+        position: relative;
+        top: 50px;
+    }
+}

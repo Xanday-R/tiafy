@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>
+        Tiafy -
+        <% if(result === false) { %> 
+            <%= 'Неизвестная ошибка' %> 
+        <% } else { %>
+            <%= 'Профиль пользователя ' + data[0][0].login  %> 
+        <% } %> 
+    </title>
+    <link rel="shortcut icon" href="img/icon.png" type="image/x-icon">
+    <!--React-->
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <!--Bootstrap-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+    <!--jQuery-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" referrerpolicy="no-referrer"></script>
+    <!--Babel-->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!--Axios-->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <!--Google Fonts-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital@1&display=swap" rel="stylesheet">
+    <!--CSS-->
+    <link rel="stylesheet" href="css/nav.css">
+    <link rel="stylesheet" href="css/group.css">
+    <link rel="stylesheet" href="css/users.css">
+    <link rel="stylesheet" href="css/indent.css">
+    </head>
+    <body class="body">
+    <!--Navigation panel-->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid">
+        <a class="navbar-brand" style="margin-right: 8px;">
+          <% if(result === false) { %>
+            <%- '<img src="img/htmlIcon.png"></img>' %>
+          <% } else if(result === true && auth === true) { %> 
+            <%- `<img src='${photo}'></img>` %> 
+          <% } else if(result === true && auth === false) { %> 
+            <%- '<img src="img/htmlIcon.png"></img>' %> 
+          <% } %> 
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+          <div class="navbar-nav">
+            <% if(result === false) { %>
+              <%- '<a class ="nav-link" href="/">Главная страница</a> <a class ="nav-link" href="/about">О сайте</a>' %>
+            <% }else if(result === true && auth === true) { %> 
+              <%- '<a class ="nav-link" href="/profile">Профиль</a> <a class ="nav-link" href="/">Главная страница</a> <a class ="nav-link" href="/about">О сайте</a>' %> 
+            <% } else if(result === true && auth === false) { %> 
+              <%- '<a class ="nav-link" href="/auth">Авторизироваться</a> <a class ="nav-link" href="/">Главная страница</a> <a class ="nav-link" href="/about">О сайте</a>'  %> 
+            <% } %> 
+          </div>
+        </div>
+      </div>
+    </nav>
+    <div class="content" style="width: 100%; height: 100%;">
+        <div class="profile">
+            <%- `<img class="icon" src='${photo}'></img>` %> 
+            <h3><%= data[0][0].login %> </h>
+        </div>
+        <div class="data">
+            <H4>Записи пользователя <%= data[0][0].login %> </H4>
+            <div class="btn-group">
+                <button class="btn btn-secondary dropdown-toggle"  data-bs-toggle="dropdown" aria-expanded="false">Выберите тип записи</button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <li><a data-bs-toggle="collapse" href="#LifeStory" role="button" aria-expanded="false" aria-controls="LifeStory" class="dropdown-item" type="button">Истории из жизни</a></li>
+                    <li><a data-bs-toggle="collapse" href="#Quote" role="button" aria-expanded="false" aria-controls="Quote" class="dropdown-item" type="button">Цитаты</a></li>
+                </ul>
+            </div>
+            <div class="Collapse">
+                <div class="collapse" id="LifeStory">
+                    <div class="card card-body Card">
+                        <% for(i in story) { %> 
+                            <%-`<div class="card bodyS"><h5 class="card-header">${story[i].date} - ${story[i].name}</h5><div class="card-body" style="text-align: center;"><p class="card-text">${story[i].text}</p><a href="/story?id=${story[i].id}" class="btn btn-secondary btn-card">Открыть</a></div></div>`%>
+                        <% } %> 
+                        <% if(story == 0) { %>
+                            <%-`<h6>Данные не найдены</h6>`%> 
+                        <% } %>   
+                    </div>
+                </div>
+                <div class="collapse" id="Quote">
+                    <div class="card card-body Card">
+                        <% for(i in quote) { %>
+                            <% 
+                                let liked = "img/heart.svg";
+                            %>
+                            <% for(ii in data[1]) { %>
+                                <% 
+                                    if(quote[i].id == data[1][ii].idrecords)
+                                        liked = 'img/heart-fill.svg';
+                                %> 
+                            <% } %>
+                            <%- `<div class="card"><div class="card-header blockquote mb-0">${quote[i].date}</div><div class="card-body"><blockquote class="blockquote mb-0"><p>${quote[i].text}</p><footer class="blockquote-footer"><cite>${quote[i].author}</cite></footer></blockquote><div class='img'><img src="${liked}" class="rImg" id="${quote[i].id}" likes="${quote[i].likes}"><p class="${quote[i].id} p">: ${quote[i].likes}</p></div></div></div>`  %> 
+                        <% } %> 
+                        <% if(quote == 0) { %>
+                            <%-`<h6>Данные не найдены</h6>`%> 
+                        <% } %>   
+                    </div>
+                </div>
+                <div class="div"></div>
+            </div>
+        </div>
+    </div>
+    <script src="js/users.js"></script>
+    </body>
+</html>

@@ -19,6 +19,8 @@ import { AddStory } from './db/add_story';
 import { AddQuote } from './db/add_quote';
 import { GetDiaryOrStoryForUser } from './db/get_for_user';
 import { GetDiaryOrStory } from './db/get';
+import { DeleteData } from './db/delete';
+import { GetUser } from './db/get_user';
 
 import { GetAll } from './db/get_all';
 
@@ -63,7 +65,6 @@ const urlencodedParser:any = bodyParser.urlencoded({extended: false});
 // Express
 
 import { listen } from './other/port';
-import { DeleteData } from './db/delete';
 
 // App.use
 
@@ -138,18 +139,7 @@ app.get('/story', async(req:express.Request, res:express.Response) => {
             }
             else {
                 if(result[0] == 0)
-                    res.render('story', {
-                        result: true, 
-                        auth: false, 
-                        id: result[1].id, 
-                        name: result[1].name, 
-                        text: result[1].text, 
-                        appendor: result[1].appendor, 
-                        img: result[1].img, 
-                        likes: result[1].likes,
-                        liked: false,
-                        time: result[1].time
-                    });
+                    res.render('story', {result: true, auth: false, id: result[1].id, name: result[1].name, text: result[1].text, appendor: result[1].appendor, img: result[1].img, likes: result[1].likes,liked: false,time: result[1].time});
                 else {
                     let liked:any = await CheckAuth(req.cookies.token, 2);
                     for(let i in liked.liked) {
@@ -160,19 +150,7 @@ app.get('/story', async(req:express.Request, res:express.Response) => {
                     }
                     if(liked !== true)
                         liked = false;
-                    res.render('story', {
-                        result: true, 
-                        auth: true, 
-                        photo: result[0].res[0].photo, 
-                        id: result[1].id, 
-                        name: result[1].name, 
-                        text: result[1].text, 
-                        appendor: result[1].appendor, 
-                        img: result[1].img, 
-                        likes: result[1].likes, 
-                        liked: liked,
-                        time: result[1].time
-                    });
+                    res.render('story', {result: true, auth: true, photo: result[0].res[0].photo, id: result[1].id, name: result[1].name, text: result[1].text, appendor: result[1].appendor, img: result[1].img, likes: result[1].likes, liked: liked,time: result[1].time});
                 }
             }
         }
@@ -196,14 +174,7 @@ app.get('/profile', async(req:express.Request, res:express.Response) => {
                     await data.GetStory(),
                     await data.GetQuote()
                 ]
-                res.render('profile', {
-                    login: result.res[0].login, 
-                    email: result.res[0].email, 
-                    photo: result.res[0].photo,
-                    diary: data[0],
-                    story: data[1],
-                    quote: data[2]
-                });
+                res.render('profile', {login: result.res[0].login, email: result.res[0].email, photo: result.res[0].photo,diary: data[0],story: data[1],quote: data[2]});
             }
         }
     }catch(err:any) {
@@ -219,11 +190,7 @@ app.get('/profile-settings', async(req:express.Request, res:express.Response) =>
             let result:any = await CheckAuth(req.cookies.token, 1);
             if(result == 0) 
                 res.redirect('/auth');
-            else res.render('profile_settings', {
-                login: result.res[0].login, 
-                email: result.res[0].email, 
-                photo: result.res[0].photo 
-            });
+            else res.render('profile_settings', {login: result.res[0].login, email: result.res[0].email, photo: result.res[0].photo });
         }
     }catch(err:any) {
         res.redirect('/');
@@ -240,12 +207,7 @@ app.get('/profile-add', async(req:express.Request, res:express.Response) => {
             let result:any = await CheckAuth(req.cookies.token, 1);
             if(result == 0) 
                 res.redirect('/auth');
-            else res.render('profile_add', {
-                    login: result.res[0].login, 
-                    email: result.res[0].email, 
-                    photo: result.res[0].photo,
-                    inform: informL
-                });
+            else res.render('profile_add', {login: result.res[0].login, email: result.res[0].email, photo: result.res[0].photo,inform: informL});
         }
     }catch(err:any) {
         res.redirect('/');
@@ -261,12 +223,7 @@ app.get('/user', async(req:express.Request, res:express.Response) => {
             if(req.query.type === undefined || req.query.id === undefined || req.query.type !== 'diary' && req.query.type !== 'story') 
                 res.redirect('/profile');
             else {
-                res.render('user', {
-                    login: result.res[0].login, 
-                    email: result.res[0].email, 
-                    photo: result.res[0].photo,
-                    result: await GetDiaryOrStoryForUser(req.query.type, req.query.id, result.res[0].id)
-                });
+                res.render('user', {login: result.res[0].login, email: result.res[0].email, photo: result.res[0].photo,result: await GetDiaryOrStoryForUser(req.query.type, req.query.id, result.res[0].id)});
             }
         }
     }catch(err:any) {
@@ -279,15 +236,7 @@ app.get('/quotes', async(req:express.Request, res:express.Response) => {
         let result:any = await CheckAuth(req.cookies.token, 2);
         if(result == 0)
             res.render('quotes', {result: true, auth: false, data: await GetDiaryOrStory('quote')});
-        else res.render('quotes', {
-                result: true, 
-                auth: true,
-                login: result.res[0].login, 
-                email: result.res[0].email, 
-                photo: result.res[0].photo,
-                data: await GetDiaryOrStory('quote'),
-                like: result.liked
-            });
+        else res.render('quotes', {result: true, auth: true,login: result.res[0].login, email: result.res[0].email, photo: result.res[0].photo,data: await GetDiaryOrStory('quote'),like: result.liked});
     }catch(err:any) {
         res.render('quotes', {result: false, auth: false, status: 520});
     }
@@ -298,18 +247,37 @@ app.get('/stories', async(req:express.Request, res:express.Response) => {
         let result:any = await CheckAuth(req.cookies.token, 2);
         if(result == 0)
             res.render('stories', {result: true, auth: false, data: await GetDiaryOrStory('story')});
-        else res.render('stories', {
-                result: true, 
-                auth: true,
-                login: result.res[0].login, 
-                email: result.res[0].email, 
-                photo: result.res[0].photo,
-                data: await GetDiaryOrStory('story'),
-                like: result.liked
-            });
+        else res.render('stories', {result: true, auth: true,login: result.res[0].login, email: result.res[0].email, photo: result.res[0].photo,data: await GetDiaryOrStory('story'),like: result.liked});
     }catch (err:any) {
         res.render('stories', {result: false, auth: false, status: 520});
     }
+});
+
+app.get('/users', async(req:express.Request, res:express.Response) => {
+        let result:any = [0, 0]
+        result[0]= await CheckAuth(req.cookies.token, 1);
+        if(req.query.id === undefined) {
+            if(result[0] == 0)
+                res.render('404', {result: true, auth: false});
+            else
+                res.render('404', {result: true, auth: true, login: result[0].res[0].login, email: result[0].res[0].email, photo: result[0].res[0].photo});
+        } else {
+            result[1] = await GetUser(req.query.id, result[0].res[0].id);
+            let data:any = new GetAll(result[1][0][0].id);
+            data = [await data.GetStory(), await data.GetQuote()];
+            if(result[0] == 0) {
+                if(result[1] == 0)
+                    res.render('404', {result: true, auth: false});
+                else
+                    res.render('users', {result: true, auth: false, data: result[1], story: data[0], quote: data[1]});
+            }
+            else {
+                if(result[1][0] == 0)
+                    res.render('404', {result: true, auth: true, login: result[0].res[0].login, email: result[0].res[0].email, photo: result[0].res[0].photo});
+                else
+                    res.render('users', {result: true, auth: true, login: result[0].res[0].login, email: result[0].res[0].email, photo: result[0].res[0].photo, data: result[1], story: data[0], quote: data[1]});
+            }
+        }
 });
 
 // Post
@@ -482,7 +450,7 @@ app.post('/add-quote', urlencodedParser, async(req:express.Request, res:express.
             inform = 'Little symbols or many symbols';
             res.redirect('/profile-add');
         }
-        else if(/[0-9]/.test(req.body.Author) === true || /[0-9]/.test(req.body.Text) === true || /^[А-я\u00C0-\u00ff\s'\.,-\/#!$%\^&\*;:{}=\-_`~()]+$/.test(req.body.Text) === false || /^[А-я\u00C0-\u00ff\s'\.,-\/#!$%\^&\*;:{}=\-_`~()]+$/.test(req.body.Author) === false) {
+        else if(/[0-9]/.test(req.body.Author) === true || /[0-9]/.test(req.body.Text) === true) {
             inform = 'There is a latin or numbers';
             res.redirect('/profile-add');
         }else {
