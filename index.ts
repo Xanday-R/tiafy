@@ -65,6 +65,7 @@ const urlencodedParser:any = bodyParser.urlencoded({extended: false});
 // Express
 
 import { listen } from './other/port';
+import { isConstructorDeclaration } from 'typescript';
 
 // App.use
 
@@ -235,7 +236,7 @@ app.get('/quotes', async(req:express.Request, res:express.Response) => {
     try{
         let result:any = await CheckAuth(req.cookies.token, 2);
         if(result == 0)
-            res.render('quotes', {result: true, auth: false, data: await GetDiaryOrStory('quote')});
+            res.render('quotes', {result: true, auth: false, data: await GetDiaryOrStory('quote'), like: result.liked});
         else res.render('quotes', {result: true, auth: true,login: result.res[0].login, email: result.res[0].email, photo: result.res[0].photo,data: await GetDiaryOrStory('quote'),like: result.liked});
     }catch(err:any) {
         res.render('quotes', {result: false, auth: false, status: 520});
@@ -246,7 +247,7 @@ app.get('/stories', async(req:express.Request, res:express.Response) => {
     try {
         let result:any = await CheckAuth(req.cookies.token, 2);
         if(result == 0)
-            res.render('stories', {result: true, auth: false, data: await GetDiaryOrStory('story')});
+            res.render('stories', {result: true, auth: false, data: await GetDiaryOrStory('story'), like: result.liked});
         else res.render('stories', {result: true, auth: true,login: result.res[0].login, email: result.res[0].email, photo: result.res[0].photo,data: await GetDiaryOrStory('story'),like: result.liked});
     }catch (err:any) {
         res.render('stories', {result: false, auth: false, status: 520});
@@ -262,16 +263,19 @@ app.get('/users', async(req:express.Request, res:express.Response) => {
             else
                 res.render('404', {result: true, auth: true, login: result[0].res[0].login, email: result[0].res[0].email, photo: result[0].res[0].photo});
         } else {
-            result[1] = await GetUser(req.query.id, result[0].res[0].id);
-            let data:any = new GetAll(result[1][0][0].id);
-            data = [await data.GetStory(), await data.GetQuote()];
             if(result[0] == 0) {
+                result[1] = await GetUser(req.query.id);
+                let data:any = new GetAll(result[1][0][0].id);
+                data = [await data.GetStory(), await data.GetQuote()];
                 if(result[1] == 0)
                     res.render('404', {result: true, auth: false});
                 else
                     res.render('users', {result: true, auth: false, data: result[1], story: data[0], quote: data[1]});
             }
             else {
+                result[1] = await GetUser(req.query.id, result[0].res[0].id);
+                let data:any = new GetAll(result[1][0][0].id);
+                data = [await data.GetStory(), await data.GetQuote()];
                 if(result[1][0] == 0)
                     res.render('404', {result: true, auth: true, login: result[0].res[0].login, email: result[0].res[0].email, photo: result[0].res[0].photo});
                 else
