@@ -73,7 +73,6 @@
     </div>
     <script>
         $('img').click((e) => {
-            console.log(e.target.attributes.id.value);
             $('.photoUvel').toggle();
             $('.background img').attr('src', $(`#${e.target.attributes.id.value}`).attr('src'));
         });

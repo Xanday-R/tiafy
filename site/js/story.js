@@ -45,7 +45,7 @@ class Story extends React.Component {
                         }
                     }} className="rImg" style={{ "width": "1.65em", "height": "1.65em"}} />: {this.likes}</h6>
                 </div>
-                <div className="card-footer">Было добавлено пользователем <cite>{this.props.appendor} {this.props.time}</cite></div>
+                <div className="card-footer"> <a href={`/users?id=${this.props.idappendor}`} style={{'text-decoration': 'none', 'color': '#212529'}}>Было добавлено пользователем <cite>{this.props.appendor} {this.props.time}</cite></a></div>
             </div>
         );
     }

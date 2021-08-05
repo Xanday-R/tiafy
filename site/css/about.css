@@ -1,0 +1,15 @@
+/* Content */
+
+.content {
+    padding: 1.5em;
+}
+
+h1 {
+    font-family: 'Josefin Sans', sans-serif;
+    margin: 0px;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}

@@ -255,6 +255,7 @@ app.get('/stories', async(req:express.Request, res:express.Response) => {
 });
 
 app.get('/users', async(req:express.Request, res:express.Response) => {
+    try {
         let result:any = [0, 0]
         result[0]= await CheckAuth(req.cookies.token, 1);
         if(req.query.id === undefined) {
@@ -282,6 +283,21 @@ app.get('/users', async(req:express.Request, res:express.Response) => {
                     res.render('users', {result: true, auth: true, login: result[0].res[0].login, email: result[0].res[0].email, photo: result[0].res[0].photo, data: result[1], story: data[0], quote: data[1]});
             }
         }
+    }catch(err:any) {
+        res.render('404', {result: false, auth: false, status: 520});
+    }
+});
+
+app.get('/about', async(req:express.Request, res:express.Response) => {
+    try {
+        let result:any = await CheckAuth(req.cookies.token, 1);
+        if(result == 0)
+            res.render('about', {result: true, auth: false});
+        else 
+        res.render('about', {result: true, auth: true, login: result.res[0].login, email: result.res[0].email, photo: result.res[0].photo});
+    }catch(err:any) {
+        res.render('about', {result: true, auth: false});
+    }
 });
 
 // Post
