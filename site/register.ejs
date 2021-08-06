@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tiafy - Восстановление пароля</title>
+    <title>Tiafy - Регистрация</title>
     <link rel="shortcut icon" href="img/icon.png" type="image/x-icon">
     <!--React-->
     <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
@@ -48,30 +48,36 @@
         </div>
     </nav>
     <div class="content">
-        <% if(inform == 'Email not found') { %> 
-            <%- `<div class="alert alert-danger" role="alert" style="border: none;">Почта не занята</div>` %> 
-        <% } else if(inform == 'Empty field') { %> 
-            <%- `<div class="alert alert-danger" role="alert" style="border: none;">Пустое поле</div>` %> 
+        <% if(inform == 'Empty field') { %> 
+            <%- `<div class="alert alert-danger" role="alert" style="border: none;">Найдено пустое поле</div>` %> 
         <% } else if(inform == 'Pincode sent') { %> 
-            <%- `<div class="alert alert-success" role="alert" style="border: none;">Код был отправлен на вашу почту</div>` %> 
+            <%- `<div class="alert alert-success" role="alert" style="border: none;">Код подтверждения регистрации был отправлен на почту</div>` %> 
         <% } else if(inform == 'Cyrillic is present') { %> 
             <%- `<div class="alert alert-danger" role="alert" style="border: none;">В пароле присутсвует кириллица</div>` %> 
         <% } else if(inform == 'Less than 8 characters or more than 191 characters') { %> 
             <%- `<div class="alert alert-danger" role="alert" style="border: none;">Пароль не может быть меньше 8 и больше 191 символов</div>` %> 
-        <% } else if(inform == 'You cannot apply for a password change more than once') { %> 
-            <%- `<div class="alert alert-danger" role="alert" style="border: none;">Заявка уже отправлялась</div>` %> 
+        <% } else if(inform == 'Incorrect email') { %> 
+            <%- `<div class="alert alert-danger" role="alert" style="border: none;">Введена некоректная почта</div>` %> 
+        <% } else if(inform == 'Less than 4 characters or more than 191 characters') { %> 
+            <%- `<div class="alert alert-danger" role="alert" style="border: none;">Логин не может быть меньше 4 и больше 191 символов</div>` %> 
+        <% } else if(inform == 'Email found') { %> 
+            <%- `<div class="alert alert-danger" role="alert" style="border: none;">Почта занята или уже на почту уже отправлялось письмо с подтверждением</div>` %> 
         <% } %>
         <div class="auth">
-            <form action="/restore-pass" method="POST">
-                <h3>Восстановление пароля</h3>
+            <form action="register" method="POST">
+                <h3>Авторизация</h3>
+                <div class="mb-3">
+                    <label for="InputLogin" class="form-label">Введите логин</label>
+                    <input type="text" name="Login" class="form-control" id="InputLogin">
+                </div>
                 <div class="mb-3">
                   <label for="InputEmail" class="form-label">Введите электронную почту</label>
                   <input type="email" name="Email" class="form-control" id="InputEmail">
                 </div>
                 <div class="mb-3">
-                    <label for="InputPass" class="form-label">Введите будущий пароль</label>
-                    <input type="text" name="Password" class="form-control" id="InputPass">
-                  </div>
+                  <label for="InputPassword" class="form-label">Введите пароль</label>
+                  <input type="password" name="Password" class="form-control" id="InputPassword">
+                </div>
                 <button type="submit" class="btn btn-secondary">Отправить</button>
             </form>
         </div>

@@ -24,6 +24,8 @@ import { GetUser } from './db/get_user';
 import { LogIn } from './db/log-in';
 import { RestorePass } from './db/restore_pass';
 import { ConfirmPass } from './db/confirm-pass';
+import { ConfirmRegistration } from './db/confirm_registration';
+import { Registration } from './db/regis';
 
 import { GetAll } from './db/get_all';
 
@@ -68,7 +70,6 @@ const urlencodedParser:any = bodyParser.urlencoded({extended: false});
 // Express
 
 import { listen } from './other/port';
-
 // App.use
 
 app.set('views', __dirname + '/site')
@@ -77,6 +78,7 @@ app.set('view engine', 'ejs');
 app.use(express.static(__dirname + "/site"));
 app.use(express.static(__dirname + "/site/js"));
 app.use(express.static(__dirname + "/site/css"));
+app.use(express.static(__dirname + "/site/img"));
 app.use(cookieParser());
 
 
@@ -338,9 +340,41 @@ app.get('/confirm-pass', async(req:express.Request, res:express.Response) => {
         if(result != 0)
             res.redirect('/profile')
         else if(req.query.pincode!.length! < 6)
-            res.redirect('/profile')
+            res.redirect('/registration')
         else {
             result = await ConfirmPass(req.query.pincode);
+            addCookie(res, result);
+            res.redirect('/');
+        }
+    }catch(err:any) {
+        res.render('404', {result: false, auth: false, status: 520});
+    }
+});
+
+app.get('/registration', async(req:express.Request, res:express.Response) => {
+    try {
+        let result:any = await CheckAuth(req.cookies.token, 1);
+        if(result != 0)
+            res.redirect('/profile')
+        else {
+            let informT:string = inform;
+            inform = null;
+            res.render('register', {inform: informT});
+        }
+    }catch(err:any) {
+        res.render('404', {result: false, auth: false, status: 520});
+    }
+});
+
+app.get('/confirm-registration', async(req:express.Request, res:express.Response) => {
+    try {
+        let result:any = await CheckAuth(req.cookies.token, 1);
+        if(result != 0)
+            res.redirect('/profile')
+        else if(req.query.pincode!.length! < 6)
+            res.redirect('/registration')
+        else {
+            result = await ConfirmRegistration(req.query.pincode);
             addCookie(res, result);
             res.redirect('/');
         }
@@ -558,6 +592,7 @@ app.post('/log-in', urlencodedParser, async(req:express.Request, res:express.Res
 });
 
 app.post('/restore-pass', urlencodedParser, async(req:express.Request, res:express.Response) => {
+    try {
         if(req.body.Email.length == 0 || req.body.Password.length == 0) {
             inform = 'Empty field';
             res.redirect('/forgot-pass');
@@ -580,8 +615,42 @@ app.post('/restore-pass', urlencodedParser, async(req:express.Request, res:expre
                 res.redirect('/forgot-pass');
             }
         }
+    }catch(err:any) {
+        res.status(520);
+    }
 });
 
+app.post('/register', urlencodedParser, async(req:express.Request, res:express.Response) => {
+    try {
+        if(req.body.Email.length == 0 || req.body.Password.length == 0 || req.body.Login.length == 0) {
+            inform = 'Empty field';
+            res.redirect('/registration');
+        } else if(/[\u0400-\u04FF]/.test(`${req.body.Password}`) === true) {
+            inform = 'Cyrillic is present';
+            res.redirect('/registration');
+        }else if(req.body.Password.length < 8 || req.body.Password.length > 191) {
+            inform = 'Less than 8 characters or more than 191 characters';
+            res.redirect('/registration');
+        } else if(req.body.Login.length < 4 || req.body.Login.length > 191) {
+            inform = 'Less than 4 characters or more than 191 characters';
+            res.redirect('/registration');
+        } else if(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(req.body.Email) === false) {
+            inform = 'Incorrect email';
+            res.redirect('/registration');
+        }else {
+            let result:any = await Registration(req.body.Email, req.body.Login, req.body.Password);
+            if(result == 0) {
+                inform = 'Email found';
+                res.redirect('/registration');
+            } else {
+                inform = 'Pincode sent';
+                res.redirect('/registration');
+            }
+        }
+    }catch(err:any) {
+        res.status(520);
+    }
+});
 
 // PORT
 

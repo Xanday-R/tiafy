@@ -1,4 +1,4 @@
-import { SendMessage } from '../mail/send_messange';
+import { SendMessage } from '../mail/reset_pass';
 import { GeneratePinCode } from '../other/genpincode';
 import { db } from './connection';
 
