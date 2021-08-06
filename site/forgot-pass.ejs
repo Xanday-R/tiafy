@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tiafy - Восстановление пароля</title>
+    <link rel="shortcut icon" href="img/icon.png" type="image/x-icon">
+    <!--React-->
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <!--Bootstrap-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+    <!--jQuery-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" referrerpolicy="no-referrer"></script>
+    <!--Babel-->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!--Axios-->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital@1&display=swap" rel="stylesheet">
+    <!--Google Fonts-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital@1&display=swap" rel="stylesheet"> 
+    <!--CSS-->
+    <link rel="stylesheet" href="css/nav.css">
+    <link rel="stylesheet" href="css/other.css">
+</head>
+<body>
+    <!--Navigation panel-->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+          <a class="navbar-brand" style="margin-right: 8px;">
+                <img src="img/htmlIcon.png"></img>
+          </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+                <a class ="nav-link" href="/">Главная страница</a>
+                <a class ="nav-link" href="/about">О сайте</a>
+            </div>
+          </div>
+        </div>
+    </nav>
+    <div class="content">
+        <% if(inform == 'Email not found') { %> 
+            <%- `<div class="alert alert-danger" role="alert" style="border: none;">Почта не занята</div>` %> 
+        <% } else if(inform == 'Empty field') { %> 
+            <%- `<div class="alert alert-danger" role="alert" style="border: none;">Почта не занята</div>` %> 
+        <% } else if(inform == 'Pincode sent') { %> 
+            <%- `<div class="alert alert-success" role="alert" style="border: none;">Код был отправлен на вашу почту</div>` %> 
+        <% } else if(inform == 'Cyrillic is present') { %> 
+            <%- `<div class="alert alert-danger" role="alert" style="border: none;">В пароле присутсвует кириллица</div>` %> 
+        <% } else if(inform == 'Less than 8 characters or more than 191 characters') { %> 
+            <%- `<div class="alert alert-danger" role="alert" style="border: none;">Пароль не может быть меньше 8 и больше 191 символов</div>` %> 
+        <% } else if(inform == 'You cannot apply for a password change more than once') { %> 
+            <%- `<div class="alert alert-danger" role="alert" style="border: none;">Заявка уже отправлялась</div>` %> 
+        <% } %>
+        <div class="auth">
+            <form action="/restore-pass" method="POST">
+                <h3>Восстановление пароля</h3>
+                <div class="mb-3">
+                  <label for="InputEmail" class="form-label">Введите электронную почту</label>
+                  <input type="email" name="Email" class="form-control" id="InputEmail">
+                </div>
+                <div class="mb-3">
+                    <label for="InputPass" class="form-label">Введите будущий пароль</label>
+                    <input type="text" name="Password" class="form-control" id="InputPass">
+                  </div>
+                <button type="submit" class="btn btn-secondary">Отправить</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

@@ -21,6 +21,9 @@ import { GetDiaryOrStoryForUser } from './db/get_for_user';
 import { GetDiaryOrStory } from './db/get';
 import { DeleteData } from './db/delete';
 import { GetUser } from './db/get_user';
+import { LogIn } from './db/log-in';
+import { RestorePass } from './db/restore_pass';
+import { ConfirmPass } from './db/confirm-pass';
 
 import { GetAll } from './db/get_all';
 
@@ -65,9 +68,6 @@ const urlencodedParser:any = bodyParser.urlencoded({extended: false});
 // Express
 
 import { listen } from './other/port';
-import { isConstructorDeclaration } from 'typescript';
-import { LogIn } from './db/log-in';
-import { info } from 'console';
 
 // App.use
 
@@ -317,19 +317,35 @@ app.get('/auth', async(req:express.Request, res:express.Response) => {
     }
 });
 
-app.post('/log-in', urlencodedParser, async(req:express.Request, res:express.Response) => {
-    if(req.body.Email.length == 0 || req.body.Password.length == 0) {
-        inform = 'Empty field';
-        res.redirect('auth');
-    }else {
-        let result:any = await LogIn(req.body.Email, req.body.Password);
-        if(result == 0) {
-            inform = 'Incorrect email or password';
-            res.redirect('auth');
-        } else {
-            addCookie(res, result[0].token);
+app.get('/forgot-pass', async(req:express.Request, res:express.Response) => {
+    try {
+        let result:any = await CheckAuth(req.cookies.token, 1);
+        if(result != 0)
+            res.redirect('/profile')
+        else {
+            let informT:string = inform;
+            inform = null;
+            res.render('forgot-pass', {inform: informT});
+        }
+    }catch(err:any) {
+        res.render('404', {result: false, auth: false, status: 520});
+    }
+});
+
+app.get('/confirm-pass', async(req:express.Request, res:express.Response) => {
+    try {
+        let result:any = await CheckAuth(req.cookies.token, 1);
+        if(result != 0)
+            res.redirect('/profile')
+        else if(req.query.pincode!.length! < 6)
+            res.redirect('/profile')
+        else {
+            result = await ConfirmPass(req.query.pincode);
+            addCookie(res, result);
             res.redirect('/');
         }
+    }catch(err:any) {
+        res.render('404', {result: false, auth: false, status: 520});
     }
 });
 
@@ -520,6 +536,52 @@ app.post('/add-quote', urlencodedParser, async(req:express.Request, res:express.
         res.status(520);
     }
 });
+
+app.post('/log-in', urlencodedParser, async(req:express.Request, res:express.Response) => {
+    try {
+        if(req.body.Email.length == 0 || req.body.Password.length == 0) {
+            inform = 'Empty field';
+            res.redirect('auth');
+        }else {
+            let result:any = await LogIn(req.body.Email, req.body.Password);
+            if(result == 0) {
+                inform = 'Incorrect email or password';
+                res.redirect('auth');
+            } else {
+                addCookie(res, result[0].token);
+                res.redirect('/');
+            }
+        }
+    }catch(err:any) {
+        res.status(520)
+    }
+});
+
+app.post('/restore-pass', urlencodedParser, async(req:express.Request, res:express.Response) => {
+        if(req.body.Email.length == 0 || req.body.Password.length == 0) {
+            inform = 'Empty field';
+            res.redirect('/forgot-pass');
+        } else if(/[\u0400-\u04FF]/.test(`${req.body.Password}`) === true) {
+            inform = 'Cyrillic is present';
+            res.redirect('/forgot-pass');
+        }else if(req.body.Password.length < 8 || req.body.Password.length > 191) {
+            inform = 'Less than 8 characters or more than 191 characters';
+            res.redirect('/forgot-pass');
+        }else {
+            let result:any = await RestorePass(req.body.Email, req.body.Password);
+            if(result == 0) {
+                inform = 'Email not found';
+                res.redirect('/forgot-pass');
+            }else if(result == 1) {
+                inform = 'You cannot apply for a password change more than once';
+                res.redirect('/forgot-pass');
+            } else {
+                inform = 'Pincode sent';
+                res.redirect('/forgot-pass');
+            }
+        }
+});
+
 
 // PORT
 
