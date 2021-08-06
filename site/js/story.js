@@ -16,6 +16,7 @@ class Story extends React.Component {
             this.state = { liked: true }
             this.src = "img/heart-fill.svg";
         };
+        console.log(this.props.idappendor)
     }
     render() {
         return (
@@ -45,7 +46,7 @@ class Story extends React.Component {
                         }
                     }} className="rImg" style={{ "width": "1.65em", "height": "1.65em"}} />: {this.likes}</h6>
                 </div>
-                <div className="card-footer"> <a href={`/users?id=${this.props.idappendor}`} style={{'text-decoration': 'none', 'color': '#212529'}}>Было добавлено пользователем <cite>{this.props.appendor} {this.props.time}</cite></a></div>
+                <div className="card-footer"> <a href={`/users?id=${this.props.idappendor}`} style={{'textDecoration': 'none', 'color': '#212529'}}>Было добавлено пользователем <cite>{this.props.appendor} {this.props.time}</cite></a></div>
             </div>
         );
     }

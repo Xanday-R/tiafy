@@ -66,6 +66,8 @@ const urlencodedParser:any = bodyParser.urlencoded({extended: false});
 
 import { listen } from './other/port';
 import { isConstructorDeclaration } from 'typescript';
+import { LogIn } from './db/log-in';
+import { info } from 'console';
 
 // App.use
 
@@ -151,7 +153,7 @@ app.get('/story', async(req:express.Request, res:express.Response) => {
                     }
                     if(liked !== true)
                         liked = false;
-                    res.render('story', {result: true, auth: true, photo: result[0].res[0].photo, id: result[1].id, name: result[1].name, text: result[1].text, appendor: result[1].appendor, img: result[1].img, likes: result[1].likes, liked: liked,time: result[1].time});
+                    res.render('story', {result: true, auth: true, photo: result[0].res[0].photo, id: result[1].id, name: result[1].name, text: result[1].text, idappendor: result[1].idappendor, appendor: result[1].appendor, img: result[1].img, likes: result[1].likes, liked: liked,time: result[1].time});
                 }
             }
         }
@@ -297,6 +299,37 @@ app.get('/about', async(req:express.Request, res:express.Response) => {
         res.render('about', {result: true, auth: true, login: result.res[0].login, email: result.res[0].email, photo: result.res[0].photo});
     }catch(err:any) {
         res.render('about', {result: true, auth: false});
+    }
+});
+
+app.get('/auth', async(req:express.Request, res:express.Response) => {
+    try {
+        let result:any = await CheckAuth(req.cookies.token, 1);
+        if(result != 0)
+            res.redirect('/profile')
+        else {
+            let informT:string = inform;
+            inform = null;
+            res.render('auth', {inform: informT});
+        }
+    }catch(err:any) {
+        res.render('404', {result: false, auth: false, status: 520});
+    }
+});
+
+app.post('/log-in', urlencodedParser, async(req:express.Request, res:express.Response) => {
+    if(req.body.Email.length == 0 || req.body.Password.length == 0) {
+        inform = 'Empty field';
+        res.redirect('auth');
+    }else {
+        let result:any = await LogIn(req.body.Email, req.body.Password);
+        if(result == 0) {
+            inform = 'Incorrect email or password';
+            res.redirect('auth');
+        } else {
+            addCookie(res, result[0].token);
+            res.redirect('/');
+        }
     }
 });
 
