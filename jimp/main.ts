@@ -1,11 +1,11 @@
-import Jimp from "jimp";
+import Jimp, { AUTO } from "jimp";
 import { UpdImg } from "../db/upd_img";
 const imgur = require('imgur')
 
 export async function UploadPhoto(img:any, id:any) {
    Jimp.read(img)
-      .then(read => {;
-         read.resize(176, 176)
+      .then(read => {
+         read.resize(176, 176);
          read.write(img);
       });
    setTimeout(() => {
