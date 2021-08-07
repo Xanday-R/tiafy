@@ -383,6 +383,20 @@ app.get('/confirm-registration', async(req:express.Request, res:express.Response
     }
 });
 
+app.get('/exit', async(req:express.Request, res:express.Response) => {
+    try {
+        let result:any = await CheckAuth(req.cookies.token, 1);
+        if(result == 0)
+            res.redirect('/auth');
+        else {
+            res.clearCookie('token');
+            res.redirect('/');
+        }
+    }catch(err:any) {
+        res.status(520);
+    }
+});
+
 // Post
 
 app.post('/upload-img', async(req:express.Request, res:express.Response) => {

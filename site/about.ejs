@@ -46,9 +46,9 @@
           <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
               <% if(auth === true) { %> 
-                <%- '<a class ="nav-link" href="/profile">Профиль</a> <a class ="nav-link" href="/">Главная страница</a> <a class ="nav-link" href="/about">О сайте</a>' %> 
+                <%- '<a class ="nav-link" href="/profile">Профиль</a> <a class ="nav-link" href="/">Главная страница</a> <a class ="nav-link" href="/exit">Выход</a> %> 
               <% } else if(auth === false) { %> 
-                <%- '<a class ="nav-link" href="/">Главная страница</a> <a class ="nav-link" href="/auth">Авторизироваться</a> <a class ="nav-link" href="/about">О сайте</a>'  %> 
+                <%- '<a class ="nav-link" href="/">Главная страница</a> <a class ="nav-link" href="/auth">Авторизироваться</a>'  %> 
               <% } %> 
             </div>
           </div>
