@@ -1,4 +1,4 @@
-import { SendMessage } from '../mail/reset_pass';
+import { SendMessageReset } from '../mail/reset_pass';
 import { GeneratePinCode } from '../other/genpincode';
 import { db } from './connection';
 
@@ -11,6 +11,6 @@ export async function RestorePass(email:string, password:string) {
     if(check != 0) return 1;
     let pincode:any = GeneratePinCode();
     await knex('pincode').insert({id_user: result[0].id, pincode: pincode, password: password});
-    result = await SendMessage(email, pincode);
+    result = await SendMessageReset(email, pincode);
     return 2;
 }

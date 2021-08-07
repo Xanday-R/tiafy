@@ -26,6 +26,8 @@ import { RestorePass } from './db/restore_pass';
 import { ConfirmPass } from './db/confirm-pass';
 import { ConfirmRegistration } from './db/confirm_registration';
 import { Registration } from './db/regis';
+import { SendMessageRegister } from './mail/register';
+import { SendMessageReset } from './mail/reset_pass';
 
 import { GetAll } from './db/get_all';
 
@@ -70,6 +72,7 @@ const urlencodedParser:any = bodyParser.urlencoded({extended: false});
 // Express
 
 import { listen } from './other/port';
+
 // App.use
 
 app.set('views', __dirname + '/site')

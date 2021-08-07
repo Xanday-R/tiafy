@@ -1,4 +1,4 @@
-import { SendMessage } from '../mail/register';
+import { SendMessageRegister } from '../mail/register';
 import { GeneratePinCode } from '../other/genpincode';
 import { db } from './connection';
 
@@ -11,6 +11,6 @@ export async function Registration(email:string, login:string, password:string) 
     if(result != 0) return 0
     let pincode:any = GeneratePinCode();
     await knex('pincode').insert({login: login, email: email, pincode: pincode, password: password});
-    result = await SendMessage(email, pincode);
+    result = await SendMessageRegister(email, pincode);
     return 1;
 }

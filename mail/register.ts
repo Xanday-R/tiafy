@@ -1,7 +1,7 @@
 import { Message } from "emailjs";
 import { client } from "./outlook";
 
-export async function SendMessage(email:string, pincode:string) {
+export async function SendMessageRegister(email:string, pincode:string) {
     const message = new Message({
         from: 'tiafy_official@outlook.com',
         to: `${email}`,
